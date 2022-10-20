@@ -7,6 +7,16 @@ using std::move;
 
 Map::Map(vector<vector<char>> mapDescription) : description(mapDescription)
 {
+    for (auto row : mapDescription)
+    {
+        for (auto c : row)
+        {
+            if (!constants::tilePositionsInMap.contains(c))
+            {
+                throw std::invalid_argument("Unknown tile type.");
+            }
+        }
+    }
     groundTexture.loadFromFile("../assets/tiles.png");
     for (const auto &[tileType, pos] : constants::tilePositionsInMap)
     {

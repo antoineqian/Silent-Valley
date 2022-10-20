@@ -15,5 +15,5 @@ target_link_libraries(test
 	silentValleyLib
 	gtest_main
 	)
-target_include_directories(test PRIVATE src)
+target_include_directories(test PRIVATE ../src)
 add_test(NAME test_map COMMAND test)
