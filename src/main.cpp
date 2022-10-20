@@ -8,14 +8,7 @@ using namespace std::literals;
 // The main function for the program
 int main()
 {
-    Map map({{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-             {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-             {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-             {'p', 'p', 'p', 'b', 'b', 'b', 'p', 'p', 'p'},
-             {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-             {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-             {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-             {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}});
+    Map map("../assets/layer0.txt");
 
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions

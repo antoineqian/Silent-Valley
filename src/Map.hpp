@@ -1,10 +1,12 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <string>
 #include "Entity.hpp"
 #include "constants.hpp"
 // #include "Tileset.hpp"
 // #include "Tile.hpp"
+using std::string;
 using std::unique_ptr;
 using std::vector;
 
@@ -12,7 +14,7 @@ class Map : public Entity
 {
 public:
 	Map(vector<vector<char>> mapDescription);
-
+	Map(string descriptionFilePath);
 	void draw(sf::RenderWindow &window) const override;
 	void update() override;
 
