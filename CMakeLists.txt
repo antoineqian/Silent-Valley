@@ -9,14 +9,13 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS  src/*.cpp)
 
 add_library(silentValleyLib SHARED ${SRC_FILES})
 
-target_link_directories(silentValleyLib PUBLIC /usr/local/include/SFML/)
+# target_link_directories(silentValleyLib PUBLIC /usr/local/include/SFML/)
 
 target_link_libraries(silentValleyLib
     /Library/Frameworks/SFML.framework
     /Library/Frameworks/sfml-system.framework/sfml-system
     /Library/Frameworks/sfml-window.framework/sfml-window
     /Library/Frameworks/sfml-graphics.framework/sfml-graphics
-    # /usr/local/include/SFML/sfml-system
 )
 
 
