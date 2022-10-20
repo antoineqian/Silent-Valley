@@ -1,1 +1,4 @@
 build/
+# Precompiled Headers
+*.gch
+*.pch
