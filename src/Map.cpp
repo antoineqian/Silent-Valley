@@ -1,52 +1,76 @@
 #include "Map.hpp"
-#include "WalkTile.hpp"
-#include "BlockTile.hpp"
 #include <stdexcept>
-#include "TileDrawer.hpp"
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 using std::make_shared;
 using std::make_unique;
 using std::move;
 
-Map::Map(vector<vector<char>> mapDescription, shared_ptr<TileDrawer> pDrawer) : pDrawer(pDrawer)
+void initMap(Map &map)
 {
-	for (int i = 0; i < mapDescription.size(); ++i)
-	{
-		auto row = mapDescription[i];
+    for (auto row : map.description)
+    {
+        for (auto c : row)
+        {
+            if (!constants::tilePositionsInMap.contains(c))
+            {
+                throw std::invalid_argument("Unknown tile type.");
+            }
+        }
+    }
+    map.groundTexture.loadFromFile("../assets/tiles.png");
+    for (const auto &[tileType, pos] : constants::tilePositionsInMap)
+    {
+        sf::IntRect subRect;
+        subRect.left = pos.x * constants::tile_size;
+        subRect.top = pos.y * constants::tile_size;
+        subRect.width = constants::tile_size;
+        subRect.height = constants::tile_size;
+        sf::Sprite sprite(map.groundTexture, subRect);
+        map.sprites[tileType] = sprite;
+    }
+}
 
-		vector<unique_ptr<Tile>> tileRow;
+Map::Map(string descriptionFilePath)
+{
+    std::ifstream file(descriptionFilePath);
+    string line;
 
-		for (auto j = 0; j < row.size(); ++j)
-		{
-			auto ch = row[j];
-			if (ch == 'w')
-			{
-				tileRow.push_back(make_unique<WalkTile>(sf::Vector2f(j * 16, i * 16), pDrawer));
-			}
-			else if (ch == 'b')
-			{
-				tileRow.push_back(make_unique<BlockTile>(sf::Vector2f(j * 16, i * 16), pDrawer));
-			}
-			else
-			{
-				throw std::invalid_argument("Unknown tile type.");
-			}
-		}
-		tiles.push_back(std::move(tileRow));
-	}
+    while (std::getline(file, line))
+    {
+        vector<char> row;
+        std::istringstream iss(line);
+        char c;
+        while (iss >> c)
+        {
+            row.push_back(c);
+        }
+        description.push_back(row);
+    }
+    initMap(*this);
+}
+
+Map::Map(vector<vector<char>> mapDescription) : description(mapDescription)
+{
+    initMap(*this);
 }
 
 void Map::draw(sf::RenderWindow &window) const
 {
+    for (int i = 0; i < description.size(); ++i)
+    {
+        auto row = description[i];
 
-	for (auto &&row : tiles)
-	{
-
-		for (auto &&tile : row)
-		{
-			tile->draw(window);
-		}
-	}
+        for (int j = 0; j < row.size(); ++j)
+        {
+            char tileType = row[j];
+            auto spriteToDraw = sprites.at(tileType);
+            spriteToDraw.setPosition(j * constants::tile_size, i * constants::tile_size);
+            window.draw(spriteToDraw);
+        }
+    }
 }
 
 void Map::update()

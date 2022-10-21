@@ -1,19 +1,22 @@
 #pragma once
 #include <vector>
 #include <memory>
-
-#include "Tile.hpp"
+#include <string>
+#include "Entity.hpp"
+#include "constants.hpp"
+using std::string;
 using std::unique_ptr;
 using std::vector;
 
 class Map : public Entity
 {
 public:
-	Map(vector<vector<char>> mapDescription, shared_ptr<TileDrawer> pDrawer);
-
+	Map(vector<vector<char>> mapDescription);
+	Map(string descriptionFilePath);
 	void draw(sf::RenderWindow &window) const override;
 	void update() override;
 
-	vector<vector<unique_ptr<Tile>>> tiles;
-	shared_ptr<TileDrawer> pDrawer;
+	vector<vector<char>> description;
+	unordered_map<char, sf::Sprite> sprites;
+	sf::Texture groundTexture;
 };

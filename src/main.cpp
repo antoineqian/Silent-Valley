@@ -1,22 +1,14 @@
 #include <SFML/Graphics.hpp>
 
 #include <string>
-#include "TileDrawer.hpp"
-
-#include "constants.hpp"
+#include "Map.hpp"
 using std::make_shared;
 using namespace std::literals;
 
 // The main function for the program
 int main()
 {
-    sf::Texture texture;
-    texture.loadFromFile("../assets/tiles.png");
-
-    sf::Sprite atlas;
-    atlas.setTexture(texture);
-    auto pDrawer = make_shared<TileDrawer>(atlas);
-    WalkTile tile(sf::Vector2(0.f, 0.f), pDrawer);
+    Map map("../assets/layer0.txt");
 
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
@@ -57,9 +49,7 @@ int main()
         // the_background.update();
         // the_ball.update();
 
-        // // Display the updated graphics
-        // the_background.draw(game_window);
-        tile.draw(game_window);
+        map.draw(game_window);
         game_window.display();
     }
 }
