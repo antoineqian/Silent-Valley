@@ -8,8 +8,18 @@ using std::make_shared;
 using std::make_unique;
 using std::move;
 
-void setTexture(Map &map)
+void initMap(Map &map)
 {
+    for (auto row : map.description)
+    {
+        for (auto c : row)
+        {
+            if (!constants::tilePositionsInMap.contains(c))
+            {
+                throw std::invalid_argument("Unknown tile type.");
+            }
+        }
+    }
     map.groundTexture.loadFromFile("../assets/tiles.png");
     for (const auto &[tileType, pos] : constants::tilePositionsInMap)
     {
@@ -37,25 +47,14 @@ Map::Map(string descriptionFilePath)
         {
             row.push_back(c);
         }
-        std::cout << "\n";
         description.push_back(row);
     }
-    setTexture(*this);
+    initMap(*this);
 }
 
 Map::Map(vector<vector<char>> mapDescription) : description(mapDescription)
 {
-    for (auto row : mapDescription)
-    {
-        for (auto c : row)
-        {
-            if (!constants::tilePositionsInMap.contains(c))
-            {
-                throw std::invalid_argument("Unknown tile type.");
-            }
-        }
-    }
-    setTexture(*this);
+    initMap(*this);
 }
 
 void Map::draw(sf::RenderWindow &window) const
@@ -68,7 +67,7 @@ void Map::draw(sf::RenderWindow &window) const
         {
             char tileType = row[j];
             auto spriteToDraw = sprites.at(tileType);
-            spriteToDraw.setPosition(i * constants::tile_size, j * constants::tile_size);
+            spriteToDraw.setPosition(j * constants::tile_size, i * constants::tile_size);
             window.draw(spriteToDraw);
         }
     }

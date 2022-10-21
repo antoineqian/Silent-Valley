@@ -4,8 +4,6 @@
 #include <string>
 #include "Entity.hpp"
 #include "constants.hpp"
-// #include "Tileset.hpp"
-// #include "Tile.hpp"
 using std::string;
 using std::unique_ptr;
 using std::vector;
@@ -21,8 +19,4 @@ public:
 	vector<vector<char>> description;
 	unordered_map<char, sf::Sprite> sprites;
 	sf::Texture groundTexture;
-	// Tileset tileset;
-
-	// vector<vector<unique_ptr<Tile>>> tiles;
-	// shared_ptr<TileDrawer> pDrawer;
 };
