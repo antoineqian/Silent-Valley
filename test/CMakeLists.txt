@@ -10,10 +10,14 @@ FetchContent_MakeAvailable(googletest)
 
 
 # Now simply link against gtest or gtest_main as needed. Eg
-add_executable(test test.cpp)
+add_executable(test
+    main.cpp
+    test_map.cpp
+    test_player.cpp
+)
 target_link_libraries(test
 	silentValleyLib
 	gtest_main
-	)
+)
 target_include_directories(test PRIVATE ../src)
-add_test(NAME test_map COMMAND test)
+add_test(NAME test COMMAND test)

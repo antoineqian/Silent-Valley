@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Map.hpp"
+#include "Player.hpp"
 using std::make_shared;
 using namespace std::literals;
 
@@ -9,6 +10,7 @@ using namespace std::literals;
 int main()
 {
     Map map("../assets/layer0.txt");
+    Player player(0, 0);
 
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
@@ -46,10 +48,11 @@ int main()
             game_window.close();
 
         // Calculate the updated graphics
-        // the_background.update();
-        // the_ball.update();
+        map.update();
+        player.update();
 
         map.draw(game_window);
+        player.draw(game_window);
         game_window.display();
     }
 }

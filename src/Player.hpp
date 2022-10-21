@@ -1,11 +1,17 @@
 
 #pragma once
 #include "Entity.hpp"
+#include "constants.hpp"
 
 class Player : public MovingEntity
 {
+private:
+    static sf::Texture texture;
+
+    void processPlayerInput();
+
 public:
-    Player(sf::Vector2f position);
+    Player(float x, float y);
     ~Player();
 
     Player(const Player &) = delete;
