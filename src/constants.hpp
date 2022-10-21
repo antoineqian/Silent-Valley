@@ -10,6 +10,9 @@ struct constants
   static constexpr int window_width{60 * 16};
   static constexpr int window_height{30 * 16};
   static constexpr int tile_size{16};
+  static constexpr float player_speed{8.0f};
+
   static const unordered_map<char, sf::Vector2<int>> tilePositionsInMap;
+  
 };
 #endif // CONSTANTS_H

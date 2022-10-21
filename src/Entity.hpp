@@ -17,6 +17,11 @@ public:
   virtual void update() = 0;
   virtual void draw(sf::RenderWindow &window) const = 0;
 
+  // Helper function to get the bounding box of a sprite
+  sf::FloatRect getBoundingBox() const noexcept;
+
+  // Helper function to get the centre of a sprite
+  sf::Vector2f getCentre() const noexcept;
   // Virtual destructor
   virtual ~Entity() {}
 };
