@@ -21,3 +21,15 @@ float Entity::y() const noexcept
 {
     return sprite.getPosition().y;
 }
+
+MovingEntity::MovingEntity() : animatedSprite(sf::seconds(0.2), true, true) {}
+
+// Helper functions to get the position of the sprite
+float MovingEntity::x() const noexcept
+{
+    return animatedSprite.getPosition().x;
+}
+float MovingEntity::y() const noexcept
+{
+    return animatedSprite.getPosition().y;
+}

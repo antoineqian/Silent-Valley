@@ -8,10 +8,10 @@ using std::unordered_map;
 class AnimationAdapter
 {
 private:
-    sf::Texture texture;
+    sf::Texture &texture;
 
 public:
-    AnimationAdapter(sf::Texture texture);
+    AnimationAdapter(sf::Texture &texture);
 
     unordered_map<string, Animation> getAnimations();
 };

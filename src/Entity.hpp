@@ -2,7 +2,7 @@
 #define ENTITY_H
 
 #include <SFML/Graphics.hpp>
-
+#include "animation/AnimatedSprite.hpp"
 // Abstract base class to represent any graphical entity on the screen
 class Entity
 {
@@ -22,8 +22,8 @@ public:
   sf::Vector2f getCentre() const noexcept;
 
   // Helper functions to get the position of the sprite
-  float x() const noexcept;
-  float y() const noexcept;
+  virtual float x() const noexcept;
+  virtual float y() const noexcept;
 
   // Virtual destructor
   virtual ~Entity() {}
@@ -32,10 +32,17 @@ public:
 // Abstract base class to represent graphical entities which can move around the screen
 class MovingEntity : public Entity
 {
+public:
+  MovingEntity();
+  sf::Vector2f velocity;
+  AnimatedSprite animatedSprite;
+
+  float x() const noexcept override;
+  float y() const noexcept override;
+
 protected:
   // SFML vector to store the object's velocity
   // This is the distance the ball moves between screen updates
-  sf::Vector2f velocity;
 };
 
 #endif // ENTITY_H
