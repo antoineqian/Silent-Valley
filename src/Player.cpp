@@ -65,7 +65,6 @@ void Player::processPlayerInput()
             velocity.x = -constants::player_speed;
         else
             velocity.x = 0;
-        // velocity.y = 0;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
@@ -77,7 +76,6 @@ void Player::processPlayerInput()
             velocity.x = constants::player_speed;
         else
             velocity.x = 0;
-        // velocity.y = 0;
     }
     else
     {
