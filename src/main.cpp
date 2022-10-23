@@ -2,54 +2,63 @@
 
 #include <string>
 #include "Map.hpp"
+#include "Player.hpp"
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <memory>
 using std::make_shared;
+using std::make_unique;
+using std::string;
+using std::unordered_map;
 using namespace std::literals;
 
-// The main function for the program
 int main()
 {
     Map map("../assets/layer0.txt");
+
+    Player player(constants::window_width / 2, constants::window_height / 2);
 
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
     // and an std::string with the window title
     // The SFML code is in the sf namespace
-    sf::RenderWindow game_window{{constants::window_width, constants::window_height},
-                                 "Silent Valley Game"};
+    sf::RenderWindow window{{constants::window_width, constants::window_height},
+                            "Silent Valley Game"};
 
     // Limit the framerate
     // This allows other processes to run and reduces power consumption
-    game_window.setFramerateLimit(60); // Max rate is 60 frames per second
+    window.setFramerateLimit(60); // Max rate is 60 frames per second
 
     // Game loop
     // Clear the screen
     // Check for user input
     // Calculate the updated graphics
     // Display the updated graphics
-    while (game_window.isOpen())
+    while (window.isOpen())
     {
         // Clear the screen
-        game_window.clear(sf::Color::Black);
+        window.clear(sf::Color::Black);
 
         // Check for any events since the last loop iteration
         sf::Event event;
 
         // If the user pressed "Escape", or clicked on "close", we close the window
         // This will terminate the program
-        while (game_window.pollEvent(event))
+        while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
-                game_window.close();
+                window.close();
         }
-
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
-            game_window.close();
+            window.close();
 
         // Calculate the updated graphics
-        // the_background.update();
-        // the_ball.update();
+        map.update();
+        player.update();
 
-        map.draw(game_window);
-        game_window.display();
+        map.draw(window);
+        player.draw(window);
+        window.display();
     }
 }

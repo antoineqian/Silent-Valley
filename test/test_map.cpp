@@ -20,9 +20,3 @@ TEST(MAP, WrongInput)
 
     EXPECT_THROW(Map{description}, std::invalid_argument);
 }
-
-int main(int argc, char **argv)
-{
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
