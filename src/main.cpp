@@ -26,6 +26,9 @@ int main()
     sf::RenderWindow window{{constants::window_width, constants::window_height},
                             "Silent Valley Game"};
 
+    sf::View view(sf::Vector2f(constants::window_width / 2, constants::window_height / 2),
+                  sf::Vector2f(constants::window_width / 3, constants::window_height / 3));
+
     // Limit the framerate
     // This allows other processes to run and reduces power consumption
     window.setFramerateLimit(60); // Max rate is 60 frames per second
@@ -39,6 +42,8 @@ int main()
     {
         // Clear the screen
         window.clear(sf::Color::Black);
+        view.setCenter(player.x(), player.y());
+        window.setView(view);
 
         // Check for any events since the last loop iteration
         sf::Event event;
