@@ -9,8 +9,8 @@ using std::vector;
 class Map : public Entity
 {
 public:
-	Map(vector<vector<char>> mapDescription);
-	Map(string descriptionFilePath);
+	Map(vector<vector<char>> mapDescription, int z);
+	Map(string descriptionFilePath, int z);
 	void draw(sf::RenderWindow &window) const override;
 	void update() override;
 

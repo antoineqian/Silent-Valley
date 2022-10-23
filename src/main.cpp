@@ -17,7 +17,7 @@ int main()
 {
     Map map("assets/layer0.txt");
 
-    Player player(constants::window_width / 2, constants::window_height / 2);
+    Player player(constants::window_width / 2, constants::window_height / 2, 1);
 
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
