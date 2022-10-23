@@ -5,18 +5,14 @@
 #include "animation/Animation.hpp"
 #include "animation/AnimationAdapter.hpp"
 #include "vector"
-#include <memory>
 using std::unique_ptr;
 using std::vector;
 
 class Player : public MovingEntity
 {
-public:
-    unordered_map<string, Animation> animations;
-    // unique_ptr<Animation> currentAnimation;
-    Animation currentAnimation;
-
 private:
+    unordered_map<string, Animation> animations;
+    Animation currentAnimation;
     static sf::Texture texture;
 
     sf::Clock frameClock;

@@ -30,18 +30,6 @@ int main()
     // This allows other processes to run and reduces power consumption
     window.setFramerateLimit(60); // Max rate is 60 frames per second
 
-    sf::Clock frameClock;
-    sf::Texture texture;
-    texture.loadFromFile("../assets/complete_player_modernStyle.png");
-
-    AnimationAdapter adapter(texture);
-    auto animations = adapter.getAnimations();
-
-    AnimatedSprite animatedSprite(sf::seconds(0.2), true, false);
-    animatedSprite.setPosition({constants::window_width / 2, constants::window_height / 2});
-
-    unique_ptr<Animation> currentAnimation = make_unique<Animation>(animations["down"]);
-
     // Game loop
     // Clear the screen
     // Check for user input
@@ -70,7 +58,6 @@ int main()
         player.update();
 
         map.draw(window);
-        // window.draw(animatedSprite);
         player.draw(window);
         window.display();
     }

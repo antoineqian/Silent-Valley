@@ -1,11 +1,9 @@
 #pragma once
 #include <vector>
-#include <memory>
 #include <string>
 #include "Entity.hpp"
 #include "constants.hpp"
 using std::string;
-using std::unique_ptr;
 using std::vector;
 
 class Map : public Entity

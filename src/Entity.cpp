@@ -1,4 +1,7 @@
 #include "Entity.hpp"
+#include <iostream>
+// using std::cout;
+
 // Helper function to get the bounding box of a sprite
 sf::FloatRect Entity::getBoundingBox() const noexcept
 {
@@ -27,9 +30,12 @@ MovingEntity::MovingEntity() : animatedSprite(sf::seconds(0.2), true, true) {}
 // Helper functions to get the position of the sprite
 float MovingEntity::x() const noexcept
 {
+    // TODO: Use bounding box here to handle "collision with the screen"
+    // std::cout << "x :" << animatedSprite.getPosition().x << " \n ";
     return animatedSprite.getPosition().x;
 }
 float MovingEntity::y() const noexcept
 {
+    // std::cout << "y :" << animatedSprite.getPosition().y << " \n ";
     return animatedSprite.getPosition().y;
 }

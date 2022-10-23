@@ -1,8 +1,8 @@
 #include "Player.hpp"
 #include <cmath>
 using std::abs;
-using std::make_unique;
 #include <iostream>
+
 // Initialize static data
 sf::Texture Player::texture;
 
@@ -38,8 +38,6 @@ void Player::update()
 
 void Player::draw(sf::RenderWindow &window) const
 {
-
-    // Ask the window to draw the shape for us
     window.draw(animatedSprite);
 }
 
@@ -49,8 +47,8 @@ void Player::draw(sf::RenderWindow &window) const
 // If the player presses the down arrow key, move down (negative velocity)
 // If the player presses the up arrow key, move up (positive velocity)
 // Otherwise, do not move (zero velocity)
-// Normalize velocity
-// Do not allow the Player to move off the screen
+// Do not allow the Player to move off the
+// Play animation according to direction of movement
 void Player::processPlayerInput()
 {
     bool noKeyWasPressed = true;
@@ -59,7 +57,6 @@ void Player::processPlayerInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         noKeyWasPressed = false;
-        // currentAnimation = make_unique<Animation>(animations["left"]);
         currentAnimation = animations["left"];
 
         // Left arrow key pressed - move to the left
@@ -68,11 +65,11 @@ void Player::processPlayerInput()
             velocity.x = -constants::player_speed;
         else
             velocity.x = 0;
+        velocity.y = 0;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         noKeyWasPressed = false;
-        // currentAnimation = make_unique<Animation>(animations["right"]);
         currentAnimation = animations["right"];
 
         // Similarly for the right arrow
@@ -80,41 +77,34 @@ void Player::processPlayerInput()
             velocity.x = constants::player_speed;
         else
             velocity.x = 0;
+        velocity.y = 0;
     }
-    else
-    {
-        velocity.x = 0;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         noKeyWasPressed = false;
-        // currentAnimation = make_unique<Animation>(animations["up"]);
         currentAnimation = animations["up"];
 
         if (y() >= 0)
             velocity.y = -constants::player_speed;
         else
             velocity.y = 0;
+        velocity.x = 0;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {
         noKeyWasPressed = false;
-        // currentAnimation = make_unique<Animation>(animations["down"]);
         currentAnimation = animations["down"];
 
         if (y() <= constants::window_height)
             velocity.y = constants::player_speed;
         else
             velocity.y = 0;
+        velocity.x = 0;
     }
     else
     {
+        velocity.x = 0;
         velocity.y = 0;
-    }
-    if (abs(velocity.x) > 0 && abs(velocity.y) > 0)
-    {
-        velocity.x *= 0.7;
-        velocity.y *= 0.7;
     }
     animatedSprite.play(currentAnimation);
     animatedSprite.move(velocity);

@@ -4,10 +4,6 @@
 #include <fstream>
 #include <sstream>
 
-using std::make_shared;
-using std::make_unique;
-using std::move;
-
 void initMap(Map &map)
 {
     for (auto row : map.description)
