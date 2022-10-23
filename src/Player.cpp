@@ -65,7 +65,7 @@ void Player::processPlayerInput()
             velocity.x = -constants::player_speed;
         else
             velocity.x = 0;
-        velocity.y = 0;
+        // velocity.y = 0;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
@@ -77,9 +77,13 @@ void Player::processPlayerInput()
             velocity.x = constants::player_speed;
         else
             velocity.x = 0;
-        velocity.y = 0;
+        // velocity.y = 0;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+    else
+    {
+        velocity.x = 0;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         noKeyWasPressed = false;
         currentAnimation = animations["up"];
@@ -88,7 +92,6 @@ void Player::processPlayerInput()
             velocity.y = -constants::player_speed;
         else
             velocity.y = 0;
-        velocity.x = 0;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {
@@ -99,11 +102,9 @@ void Player::processPlayerInput()
             velocity.y = constants::player_speed;
         else
             velocity.y = 0;
-        velocity.x = 0;
     }
     else
     {
-        velocity.x = 0;
         velocity.y = 0;
     }
     animatedSprite.play(currentAnimation);
