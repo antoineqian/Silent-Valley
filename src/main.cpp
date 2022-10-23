@@ -6,19 +6,22 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <vector>
 #include <memory>
 using std::make_shared;
 using std::make_unique;
 using std::string;
 using std::unordered_map;
+using std::vector;
 using namespace std::literals;
 
 int main()
 {
-    Map map("assets/layer0.txt");
-
-    Player player(constants::window_width / 2, constants::window_height / 2, 1);
-
+    unordered_map<int, vector<Entity>> gameEntities;
+    Map map("assets/layer0.txt", constants::layers.at("ground"));
+    gameEntities[constants::layers.at("ground")].push_back(map);
+    Player player(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"));
+    gameEntities[constants::layers.at("main")].push_back(player);
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
     // and an std::string with the window title
@@ -62,8 +65,14 @@ int main()
         map.update();
         player.update();
 
-        map.draw(window);
-        player.draw(window);
+        for (const auto &[key, layer] : constants::layers)
+        {
+            for (auto e : gameEntities[layer])
+            {
+                e.draw(window);
+            }
+            // map.draw(window);
+            // player.draw(window);
+        }
         window.display();
     }
-}
