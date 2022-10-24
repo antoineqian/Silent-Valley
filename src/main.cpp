@@ -5,23 +5,25 @@
 #include "Player.hpp"
 #include <iostream>
 #include <string>
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <memory>
 using std::make_shared;
-using std::make_unique;
+using std::map;
+using std::shared_ptr;
 using std::string;
-using std::unordered_map;
 using std::vector;
 using namespace std::literals;
 
 int main()
 {
-    unordered_map<int, vector<Entity>> gameEntities;
-    Map map("assets/layer0.txt", constants::layers.at("ground"));
-    gameEntities[constants::layers.at("ground")].push_back(map);
-    Player player(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"));
-    gameEntities[constants::layers.at("main")].push_back(player);
+    map<int, vector<shared_ptr<Entity>>> gameEntities;
+    shared_ptr<Map> pMap = make_shared<Map>("assets/layer0.txt", constants::layers.at("ground"));
+    gameEntities[constants::layers.at("ground")].push_back(pMap);
+
+    shared_ptr<Player> pPlayer = make_shared<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"));
+    gameEntities[constants::layers.at("main")].push_back(pPlayer);
+
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
     // and an std::string with the window title
@@ -45,7 +47,7 @@ int main()
     {
         // Clear the screen
         window.clear(sf::Color::Black);
-        view.setCenter(player.x(), player.y());
+        view.setCenter(pPlayer->x(), pPlayer->y());
         window.setView(view);
 
         // Check for any events since the last loop iteration
@@ -62,17 +64,16 @@ int main()
             window.close();
 
         // Calculate the updated graphics
-        map.update();
-        player.update();
+        pMap->update();
+        pPlayer->update();
 
-        for (const auto &[key, layer] : constants::layers)
+        for (const auto &[layer, lEntities] : gameEntities)
         {
-            for (auto e : gameEntities[layer])
+            for (auto e : lEntities)
             {
-                e.draw(window);
+                e->draw(window);
             }
-            // map.draw(window);
-            // player.draw(window);
         }
         window.display();
     }
+}
