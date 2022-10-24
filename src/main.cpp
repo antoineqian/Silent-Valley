@@ -8,6 +8,9 @@
 #include <map>
 #include <vector>
 #include <memory>
+
+#include <tmxlite/Map.hpp>
+
 using std::make_shared;
 using std::map;
 using std::shared_ptr;
