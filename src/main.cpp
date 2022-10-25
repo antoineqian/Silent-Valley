@@ -102,24 +102,8 @@ int main()
         pPlayer->update();
         for (auto &&layer : mapLayers)
         {
-            // if (layer->getType() == tmx::Layer::Type::Image)
-            // {
-            //     std::cout << "Image Leyr \n";
-            // }
-            // else if (layer->getType() == tmx::Layer::Type::Tile)
-            // {
             window.draw(*layer);
-
-            // for (auto &&tile : layer.getTiles())
-            // {
-            // }
-            // }
         }
-        //     // else if (layer->getType() == tmx::Layer::Type::Object)
-        //     // {
-        //     //     std::cout << "Objects Leyr \n";
-        //     // }
-        // }
         for (const auto &[layer, lEntities] : gameEntities)
         {
             for (auto e : lEntities)

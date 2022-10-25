@@ -18,8 +18,9 @@ public:
   virtual void draw(sf::RenderWindow &window) const = 0;
 
   // Helper function to get the bounding box of a sprite
-  sf::FloatRect getBoundingBox() const noexcept;
-
+  virtual sf::FloatRect getBoundingBox() const;
+  // Helper function to get the hitbox of an entity to handle collisions
+  virtual sf::FloatRect getHitBox() const = 0;
   // Helper function to get the centre of a sprite
   sf::Vector2f getCentre() const noexcept;
 
@@ -36,13 +37,16 @@ class MovingEntity : public Entity
 {
 public:
   MovingEntity(int z);
-  sf::Vector2f velocity;
-  AnimatedSprite animatedSprite;
 
   float x() const noexcept override;
   float y() const noexcept override;
+  sf::FloatRect getBoundingBox() const override;
 
 protected:
+  AnimatedSprite animatedSprite;
+
+  sf::Vector2f velocity;
+
   // SFML vector to store the object's velocity
   // This is the distance the ball moves between screen updates
 };

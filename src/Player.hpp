@@ -30,4 +30,5 @@ public:
 
     void draw(sf::RenderWindow &window) const override;
     void update() override;
+    sf::FloatRect getHitBox() const override;
 };
