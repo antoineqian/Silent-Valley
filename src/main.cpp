@@ -10,8 +10,9 @@
 #include <memory>
 
 #include <tmxlite/Map.hpp>
-
+#include "Layer.hpp"
 using std::make_shared;
+using std::make_unique;
 using std::map;
 using std::shared_ptr;
 using std::string;
@@ -20,9 +21,39 @@ using namespace std::literals;
 
 int main()
 {
+
+    tmx::Map gameMap;
+    gameMap.load("../assets/mainMap.tmx");
+    // const auto tilesets = gameMap.getTilesets();
+    vector<unique_ptr<MapLayer>> mapLayers;
+
+    // for (auto &&layer : gameMap.getLayers())
+    // {
+    //     if (layer->getType() == tmx::Layer::Type::Image)
+    //     {
+    //         std::cout << "Image Leyr \n";
+    //     }
+    //     else if (layer->getType() == tmx::Layer::Type::Tile)
+    //     {
+    //         std::cout << "Tile Leyr \n";
+    //     }
+    //     else if (layer->getType() == tmx::Layer::Type::Object)
+    //     {
+    //         std::cout << "Objects Leyr \n";
+    //     }
+    // }
+    for (std::size_t i = 0; i < gameMap.getLayers().size(); i++)
+    {
+        if (gameMap.getLayers()[i]->getType() == tmx::Layer::Type::Tile)
+        {
+            mapLayers.push_back(make_unique<MapLayer>(gameMap, i));
+        }
+    }
+
     map<int, vector<shared_ptr<Entity>>> gameEntities;
-    shared_ptr<Map> pMap = make_shared<Map>("assets/layer0.txt", constants::layers.at("ground"));
-    gameEntities[constants::layers.at("ground")].push_back(pMap);
+
+    // shared_ptr<Map> pMap = make_shared<Map>("../assets/layer0.txt", constants::layers.at("ground"));
+    // gameEntities[constants::layers.at("ground")].push_back(pMap);
 
     shared_ptr<Player> pPlayer = make_shared<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"));
     gameEntities[constants::layers.at("main")].push_back(pPlayer);
@@ -67,9 +98,28 @@ int main()
             window.close();
 
         // Calculate the updated graphics
-        pMap->update();
+        // pMap->update();
         pPlayer->update();
+        for (auto &&layer : mapLayers)
+        {
+            // if (layer->getType() == tmx::Layer::Type::Image)
+            // {
+            //     std::cout << "Image Leyr \n";
+            // }
+            // else if (layer->getType() == tmx::Layer::Type::Tile)
+            // {
+            window.draw(*layer);
 
+            // for (auto &&tile : layer.getTiles())
+            // {
+            // }
+            // }
+        }
+        //     // else if (layer->getType() == tmx::Layer::Type::Object)
+        //     // {
+        //     //     std::cout << "Objects Leyr \n";
+        //     // }
+        // }
         for (const auto &[layer, lEntities] : gameEntities)
         {
             for (auto e : lEntities)

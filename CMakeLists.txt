@@ -15,7 +15,6 @@ target_link_libraries(silentValleyLib
     /Library/Frameworks/sfml-window.framework/sfml-window
     /Library/Frameworks/sfml-graphics.framework/sfml-graphics
     /usr/local/lib/libtmxlite.a
-    /usr/local/lib/pkgconfig/tmxlite.pc
 )
 
 target_include_directories(silentValleyLib PUBLIC

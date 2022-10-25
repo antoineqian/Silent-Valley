@@ -2,6 +2,7 @@
 #include <cmath>
 using std::abs;
 #include <iostream>
+using std::cout;
 
 // Initialize static data
 sf::Texture Player::texture;
@@ -38,6 +39,7 @@ void Player::update()
 
 void Player::draw(sf::RenderWindow &window) const
 {
+    // std::cout << "Drawing player \n";
     window.draw(animatedSprite);
 }
 
