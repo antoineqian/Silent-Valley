@@ -2,11 +2,12 @@
 #include <cmath>
 using std::abs;
 #include <iostream>
+using std::cout;
 
 // Initialize static data
 sf::Texture Player::texture;
 
-Player::Player(float x, float y) : MovingEntity()
+Player::Player(float x, float y, int z) : MovingEntity(z)
 {
     // Load the texture
     texture.loadFromFile("assets/complete_player_modernStyle.png");
@@ -16,6 +17,7 @@ Player::Player(float x, float y) : MovingEntity()
     // Set the initial position of the Player
     animatedSprite.setPosition(x, y);
     currentAnimation = animations["down"];
+    animatedSprite.setAnimation(currentAnimation);
 
     // Set the velocity of the Player
     velocity = {constants::player_speed, constants::player_speed}; // The Player can only move sideways
@@ -31,8 +33,7 @@ Player::~Player()
 
 // Compute the Player's new position
 void Player::update()
-{
-    // Respond to user input as this will affect how the Player moves
+{ // Respond to user input as this will affect how the Player moves
     processPlayerInput();
 }
 
@@ -53,7 +54,7 @@ void Player::processPlayerInput()
 {
     bool noKeyWasPressed = true;
     sf::Time frameTime = frameClock.restart();
-
+    auto hitBox = getHitBox();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         noKeyWasPressed = false;
@@ -61,7 +62,7 @@ void Player::processPlayerInput()
 
         // Left arrow key pressed - move to the left
         // Unless the Player has gone past the left hand side
-        if (x() >= 0)
+        if (hitBox.left >= 0)
             velocity.x = -constants::player_speed;
         else
             velocity.x = 0;
@@ -72,7 +73,7 @@ void Player::processPlayerInput()
         currentAnimation = animations["right"];
 
         // Similarly for the right arrow
-        if (x() <= constants::window_width)
+        if (hitBox.left + hitBox.width <= constants::window_width)
             velocity.x = constants::player_speed;
         else
             velocity.x = 0;
@@ -85,8 +86,7 @@ void Player::processPlayerInput()
     {
         noKeyWasPressed = false;
         currentAnimation = animations["up"];
-
-        if (y() >= 0)
+        if (hitBox.top >= 0)
             velocity.y = -constants::player_speed;
         else
             velocity.y = 0;
@@ -95,8 +95,7 @@ void Player::processPlayerInput()
     {
         noKeyWasPressed = false;
         currentAnimation = animations["down"];
-
-        if (y() <= constants::window_height)
+        if (hitBox.top + hitBox.height <= constants::window_height)
             velocity.y = constants::player_speed;
         else
             velocity.y = 0;
@@ -112,4 +111,12 @@ void Player::processPlayerInput()
         animatedSprite.stop();
     }
     animatedSprite.update(frameTime);
+}
+
+sf::FloatRect Player::getHitBox() const
+{
+    auto box = getBoundingBox();
+    // std::cout << "Left :" << box.left << " / Top : " << box.top + 12 << '\n';
+
+    return {box.left, box.top + 12, 16, 20};
 }

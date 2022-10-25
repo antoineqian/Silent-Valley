@@ -30,7 +30,7 @@ void initMap(Map &map)
     }
 }
 
-Map::Map(string descriptionFilePath)
+Map::Map(string descriptionFilePath, int z) : Entity(z)
 {
     std::ifstream file(descriptionFilePath);
     string line;
@@ -49,7 +49,7 @@ Map::Map(string descriptionFilePath)
     initMap(*this);
 }
 
-Map::Map(vector<vector<char>> mapDescription) : description(mapDescription)
+Map::Map(vector<vector<char>> mapDescription, int z) : Entity(z), description(mapDescription)
 {
     initMap(*this);
 }

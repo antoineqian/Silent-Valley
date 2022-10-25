@@ -3,7 +3,7 @@
 // using std::cout;
 
 // Helper function to get the bounding box of a sprite
-sf::FloatRect Entity::getBoundingBox() const noexcept
+sf::FloatRect Entity::getBoundingBox() const
 {
     return sprite.getGlobalBounds();
 }
@@ -25,7 +25,16 @@ float Entity::y() const noexcept
     return sprite.getPosition().y;
 }
 
-MovingEntity::MovingEntity() : animatedSprite(sf::seconds(0.2), true, true) {}
+Entity::Entity(int z) : zIndex(z)
+{
+}
+
+MovingEntity::MovingEntity(int z) : Entity(z), animatedSprite(sf::seconds(0.2), true, true) {}
+
+sf::FloatRect MovingEntity::getBoundingBox() const
+{
+    return animatedSprite.getGlobalBounds();
+}
 
 // Helper functions to get the position of the sprite
 float MovingEntity::x() const noexcept

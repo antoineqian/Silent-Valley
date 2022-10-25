@@ -8,16 +8,19 @@ class Entity
 {
 protected:
   sf::Sprite sprite;
+  int zIndex;
 
 public:
+  Entity(int z);
   // The update member function will compute the new position, appearance, etc of the object
   // The draw member function will cause the updated object to be displayed in the game window
   virtual void update() = 0;
   virtual void draw(sf::RenderWindow &window) const = 0;
 
   // Helper function to get the bounding box of a sprite
-  sf::FloatRect getBoundingBox() const noexcept;
-
+  virtual sf::FloatRect getBoundingBox() const;
+  // Helper function to get the hitbox of an entity to handle collisions
+  virtual sf::FloatRect getHitBox() const = 0;
   // Helper function to get the centre of a sprite
   sf::Vector2f getCentre() const noexcept;
 
@@ -33,14 +36,17 @@ public:
 class MovingEntity : public Entity
 {
 public:
-  MovingEntity();
-  sf::Vector2f velocity;
-  AnimatedSprite animatedSprite;
+  MovingEntity(int z);
 
   float x() const noexcept override;
   float y() const noexcept override;
+  sf::FloatRect getBoundingBox() const override;
 
 protected:
+  AnimatedSprite animatedSprite;
+
+  sf::Vector2f velocity;
+
   // SFML vector to store the object's velocity
   // This is the distance the ball moves between screen updates
 };

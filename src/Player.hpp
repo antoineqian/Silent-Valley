@@ -20,7 +20,7 @@ private:
     void processPlayerInput();
 
 public:
-    Player(float x, float y);
+    Player(float x, float y, int z);
     ~Player();
 
     Player(const Player &) = delete;
@@ -30,4 +30,5 @@ public:
 
     void draw(sf::RenderWindow &window) const override;
     void update() override;
+    sf::FloatRect getHitBox() const override;
 };

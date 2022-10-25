@@ -2,3 +2,5 @@ build/
 # Precompiled Headers
 *.gch
 *.pch
+
+.DS_Store
