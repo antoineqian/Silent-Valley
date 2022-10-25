@@ -23,25 +23,17 @@ int main()
 {
 
     tmx::Map gameMap;
-    gameMap.load("../assets/mainMap.tmx");
+    gameMap.load("assets/mainMap.tmx");
     // const auto tilesets = gameMap.getTilesets();
     vector<unique_ptr<MapLayer>> mapLayers;
 
-    // for (auto &&layer : gameMap.getLayers())
-    // {
-    //     if (layer->getType() == tmx::Layer::Type::Image)
-    //     {
-    //         std::cout << "Image Leyr \n";
-    //     }
-    //     else if (layer->getType() == tmx::Layer::Type::Tile)
-    //     {
-    //         std::cout << "Tile Leyr \n";
-    //     }
-    //     else if (layer->getType() == tmx::Layer::Type::Object)
-    //     {
-    //         std::cout << "Objects Leyr \n";
-    //     }
-    // }
+    // TODO: constants::window_width/window_height are actually hardcoded from this
+    // We should add objects like vegetation to prevent the player going anywhere near the limit
+    // of the map, and its black zone.
+    // auto mapSize = gameMap.getBounds();
+    // std::cout << mapSize.height << '\n'
+    //           << mapSize.width;
+
     for (std::size_t i = 0; i < gameMap.getLayers().size(); i++)
     {
         if (gameMap.getLayers()[i]->getType() == tmx::Layer::Type::Tile)

@@ -33,8 +33,7 @@ MovingEntity::MovingEntity(int z) : Entity(z), animatedSprite(sf::seconds(0.2), 
 
 sf::FloatRect MovingEntity::getBoundingBox() const
 {
-    // std::cout << "GETTING BOUNDING BOX";
-    // return animatedSprite.getGlobalBounds();
+    return animatedSprite.getGlobalBounds();
 }
 
 // Helper functions to get the position of the sprite

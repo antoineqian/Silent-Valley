@@ -17,6 +17,7 @@ Player::Player(float x, float y, int z) : MovingEntity(z)
     // Set the initial position of the Player
     animatedSprite.setPosition(x, y);
     currentAnimation = animations["down"];
+    animatedSprite.setAnimation(currentAnimation);
 
     // Set the velocity of the Player
     velocity = {constants::player_speed, constants::player_speed}; // The Player can only move sideways
@@ -32,15 +33,12 @@ Player::~Player()
 
 // Compute the Player's new position
 void Player::update()
-{
-    // Respond to user input as this will affect how the Player moves
+{ // Respond to user input as this will affect how the Player moves
     processPlayerInput();
-    // std::cout << animatedSprite.getGlobalBounds().top << '\n';
 }
 
 void Player::draw(sf::RenderWindow &window) const
 {
-    // std::cout << "Drawing player \n";
     window.draw(animatedSprite);
 }
 
@@ -54,14 +52,11 @@ void Player::draw(sf::RenderWindow &window) const
 // Play animation according to direction of movement
 void Player::processPlayerInput()
 {
-    // std::cout << animatedSprite.getGlobalBounds().height << '\n';
-
     bool noKeyWasPressed = true;
     sf::Time frameTime = frameClock.restart();
     auto hitBox = getHitBox();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
-        std::cout << "Left";
         noKeyWasPressed = false;
         currentAnimation = animations["left"];
 
@@ -91,7 +86,6 @@ void Player::processPlayerInput()
     {
         noKeyWasPressed = false;
         currentAnimation = animations["up"];
-
         if (hitBox.top >= 0)
             velocity.y = -constants::player_speed;
         else
@@ -101,7 +95,7 @@ void Player::processPlayerInput()
     {
         noKeyWasPressed = false;
         currentAnimation = animations["down"];
-        if (hitBox.top - hitBox.height <= constants::window_height)
+        if (hitBox.top + hitBox.height <= constants::window_height)
             velocity.y = constants::player_speed;
         else
             velocity.y = 0;
@@ -121,8 +115,8 @@ void Player::processPlayerInput()
 
 sf::FloatRect Player::getHitBox() const
 {
-    // std::cout << animatedSprite.getGlobalBounds().height << '\n';
-    // auto box = getBoundingBox();
-    // return {box.left, box.top - 12, box.width, box.height - 12};
-    return {1, 1, 1, 1};
+    auto box = getBoundingBox();
+    // std::cout << "Left :" << box.left << " / Top : " << box.top + 12 << '\n';
+
+    return {box.left, box.top + 12, 16, 20};
 }
