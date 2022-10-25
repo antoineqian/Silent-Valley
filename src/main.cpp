@@ -15,7 +15,7 @@ using namespace std::literals;
 
 int main()
 {
-    Map map("../assets/layer0.txt");
+    Map map("assets/layer0.txt");
 
     Player player(constants::window_width / 2, constants::window_height / 2);
 

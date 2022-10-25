@@ -9,7 +9,7 @@ sf::Texture Player::texture;
 Player::Player(float x, float y) : MovingEntity()
 {
     // Load the texture
-    texture.loadFromFile("../assets/complete_player_modernStyle.png");
+    texture.loadFromFile("assets/complete_player_modernStyle.png");
     AnimationAdapter adapter(texture);
     animations = adapter.getAnimations();
 

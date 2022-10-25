@@ -16,7 +16,8 @@ void initMap(Map &map)
             }
         }
     }
-    map.groundTexture.loadFromFile("../assets/tiles.png");
+    map.groundTexture.loadFromFile("assets/tiles.png");
+
     for (const auto &[tileType, pos] : constants::tilePositionsInMap)
     {
         sf::IntRect subRect;
