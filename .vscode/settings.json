@@ -13,6 +13,7 @@
         "iosfwd": "cpp",
         "unordered_map": "cpp",
         "iostream": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "fstream": "cpp"
     }
 }

@@ -45,14 +45,12 @@ int main()
         }
     }
 
-    const auto &tileSets = gameMap.getTilesets();
+    // const auto &tileSets = gameMap.getTilesets();
     // const auto &layerIDs = gameMap.getLayers()[1]->getLayerAs<tmx::TileLayer>().getTiles();
-    // const auto &layerIDs = collisionLayer.getTiles();
 
     map<int, vector<shared_ptr<Entity>>>
         gameEntities;
 
-    // shared_ptr<Map> pMap = make_shared<Map>("../assets/layer0.txt", constants::layers.at("ground"));
     // gameEntities[constants::layers.at("ground")].push_back(pMap);
 
     shared_ptr<Player> pPlayer = make_shared<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"));
@@ -98,7 +96,6 @@ int main()
             window.close();
 
         // Calculate the updated graphics
-        // pMap->update();
         pPlayer->update();
 
         for (auto &&layer : mapLayers)
