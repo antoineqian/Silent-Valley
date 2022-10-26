@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 
 #include <string>
-#include "Map.hpp"
 #include "Player.hpp"
 #include <iostream>
 #include <string>
@@ -21,18 +20,9 @@ using namespace std::literals;
 
 int main()
 {
-
     tmx::Map gameMap;
     gameMap.load("assets/mainMap.tmx");
-    // const auto tilesets = gameMap.getTilesets();
     vector<unique_ptr<MapLayer>> mapLayers;
-
-    // TODO: constants::window_width/window_height are actually hardcoded from this
-    // We should add objects like vegetation to prevent the player going anywhere near the limit
-    // of the map, and its black zone.
-    // auto mapSize = gameMap.getBounds();
-    // std::cout << mapSize.height << '\n'
-    //           << mapSize.width;
 
     for (std::size_t i = 0; i < gameMap.getLayers().size(); i++)
     {
@@ -40,9 +30,27 @@ int main()
         {
             mapLayers.push_back(make_unique<MapLayer>(gameMap, i));
         }
+        if (gameMap.getLayers()[i]->getType() == tmx::Layer::Type::Object)
+        {
+            const auto &objectLayer = gameMap.getLayers()[i]->getLayerAs<tmx::ObjectGroup>();
+            const auto &objects = objectLayer.getObjects();
+            for (const auto &object : objects)
+            {
+                const auto rec = object.getAABB();
+                const auto pos = object.getPosition();
+                std::cout << "Rec dimensions " << rec.top << " " << rec.left << " " << rec.height << " " << rec.width << '\n';
+                std::cout << "Rec pos " << pos.x << " " << pos.y << '\n';
+                // do stuff with object properties
+            }
+        }
     }
 
-    map<int, vector<shared_ptr<Entity>>> gameEntities;
+    const auto &tileSets = gameMap.getTilesets();
+    // const auto &layerIDs = gameMap.getLayers()[1]->getLayerAs<tmx::TileLayer>().getTiles();
+    // const auto &layerIDs = collisionLayer.getTiles();
+
+    map<int, vector<shared_ptr<Entity>>>
+        gameEntities;
 
     // shared_ptr<Map> pMap = make_shared<Map>("../assets/layer0.txt", constants::layers.at("ground"));
     // gameEntities[constants::layers.at("ground")].push_back(pMap);
@@ -92,6 +100,7 @@ int main()
         // Calculate the updated graphics
         // pMap->update();
         pPlayer->update();
+
         for (auto &&layer : mapLayers)
         {
             window.draw(*layer);
@@ -100,9 +109,17 @@ int main()
         {
             for (auto e : lEntities)
             {
-                e->draw(window);
+                // e->draw(window);
+                window.draw(*e);
             }
         }
+
+        // for (const auto &[layer, objs] : drawables)
+        // {
+        //     for (auto obj: objs){
+        //         obj->draw
+        //     }
+        // }
         window.display();
     }
 }

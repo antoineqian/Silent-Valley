@@ -28,7 +28,7 @@ public:
     Player(Player &&) = delete;
     Player &operator=(Player &&) = delete;
 
-    void draw(sf::RenderWindow &window) const override;
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void update() override;
     sf::FloatRect getHitBox() const override;
 };

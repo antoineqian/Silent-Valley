@@ -36,10 +36,9 @@ void Player::update()
 { // Respond to user input as this will affect how the Player moves
     processPlayerInput();
 }
-
-void Player::draw(sf::RenderWindow &window) const
+void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    window.draw(animatedSprite);
+    target.draw(animatedSprite, states);
 }
 
 // Respond to input from the player
