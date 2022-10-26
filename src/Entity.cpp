@@ -2,12 +2,6 @@
 #include <iostream>
 // using std::cout;
 
-// Helper function to get the bounding box of a sprite
-sf::FloatRect Entity::getBoundingBox() const
-{
-    return sprite.getGlobalBounds();
-}
-
 // Helper function to get the centre of a sprite
 sf::Vector2f Entity::getCentre() const noexcept
 {
@@ -15,12 +9,18 @@ sf::Vector2f Entity::getCentre() const noexcept
     return {box.width / 2.0f, box.height / 2.0f};
 }
 
+// Helper function to get the bounding box of a sprite
+sf::FloatRect StaticEntity::getBoundingBox() const
+{
+    return sprite.getGlobalBounds();
+}
+
 // Helper functions to get the position of the sprite
-float Entity::x() const noexcept
+float StaticEntity::x() const noexcept
 {
     return sprite.getPosition().x;
 }
-float Entity::y() const noexcept
+float StaticEntity::y() const noexcept
 {
     return sprite.getPosition().y;
 }

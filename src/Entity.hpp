@@ -10,28 +10,42 @@
 class Entity : public sf::Drawable
 {
 protected:
-  sf::Sprite sprite;
   int zIndex;
 
 public:
   Entity(int z);
+
   // The update member function will compute the new position, appearance, etc of the object
   // The draw member function will cause the updated object to be displayed in the game window
   virtual void update() = 0;
 
   // Helper function to get the bounding box of a sprite
-  virtual sf::FloatRect getBoundingBox() const;
+  virtual sf::FloatRect getBoundingBox() const = 0;
   // Helper function to get the hitbox of an entity to handle collisions
   virtual sf::FloatRect getHitBox() const = 0;
   // Helper function to get the centre of a sprite
   sf::Vector2f getCentre() const noexcept;
 
   // Helper functions to get the position of the sprite
-  virtual float x() const noexcept;
-  virtual float y() const noexcept;
+  virtual float x() const noexcept = 0;
+  virtual float y() const noexcept = 0;
 
   // Virtual destructor
   virtual ~Entity() {}
+};
+
+class StaticEntity : public Entity
+{
+protected:
+  sf::Sprite sprite;
+
+public:
+  StaticEntity(int z);
+  float x() const noexcept override;
+  float y() const noexcept override;
+  sf::FloatRect getBoundingBox() const override;
+
+  virtual ~StaticEntity() {}
 };
 
 // Abstract base class to represent graphical entities which can move around the screen
@@ -43,6 +57,7 @@ public:
   float x() const noexcept override;
   float y() const noexcept override;
   sf::FloatRect getBoundingBox() const override;
+  virtual ~MovingEntity() {}
 
 protected:
   AnimatedSprite animatedSprite;
