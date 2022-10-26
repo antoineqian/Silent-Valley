@@ -78,4 +78,8 @@ protected:
   sf::Vector2f velocity;
 };
 
+class Human : MovingEntity
+{
+protected:
+}
 #endif // ENTITY_H

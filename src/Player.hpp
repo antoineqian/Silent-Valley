@@ -14,7 +14,6 @@ private:
     unordered_map<string, Animation> animations;
     Animation currentAnimation;
     static sf::Texture texture;
-
     sf::Clock frameClock;
 
     void processPlayerInput();
