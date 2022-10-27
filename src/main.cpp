@@ -22,6 +22,8 @@ int main()
 {
     tmx::Map gameMap;
     gameMap.load("assets/mainMap.tmx");
+    const auto &tileSets = gameMap.getTilesets();
+
     vector<unique_ptr<MapLayer>> mapLayers;
 
     for (std::size_t i = 0; i < gameMap.getLayers().size(); i++)
@@ -40,12 +42,25 @@ int main()
                 const auto pos = object.getPosition();
                 std::cout << "Rec dimensions " << rec.top << " " << rec.left << " " << rec.height << " " << rec.width << '\n';
                 std::cout << "Rec pos " << pos.x << " " << pos.y << '\n';
+                std::cout << object.getTileID() << '\n';
+                std::cout << object.getTilesetName() << '\n';
                 // do stuff with object properties
             }
         }
     }
+    for (auto &ts : gameMap.getTilesets())
+    {
+        std::cout << ts.getFirstGID() << '\n';
+        std::cout << ts.getName() << " " << ts.getImagePath() << '\n';
+        if (ts.getName() == string("Objects"))
+        {
+            std::cout << "hello ";
+            std::cout << ts.getTile(2701)->imagePath;
+        }
+    }
 
-    // const auto &tileSets = gameMap.getTilesets();
+    // treeLayer.getImagePath()
+    // treeLayer.getTiles();
     // const auto &layerIDs = gameMap.getLayers()[1]->getLayerAs<tmx::TileLayer>().getTiles();
 
     map<int, vector<shared_ptr<Entity>>>
@@ -110,13 +125,24 @@ int main()
                 window.draw(*e);
             }
         }
+        const auto &objectLayer = gameMap.getLayers()[2]->getLayerAs<tmx::ObjectGroup>();
+        const auto &objects = objectLayer.getObjects();
+        for (const auto &object : objects)
+        {
+            const auto rec = object.getAABB();
+            const auto pos = object.getPosition();
 
-        // for (const auto &[layer, objs] : drawables)
-        // {
-        //     for (auto obj: objs){
-        //         obj->draw
-        //     }
-        // }
+            auto tID = object.getTileID();
+            auto &ts = gameMap.getTilesets()[1];
+            sf::Texture texture;
+            texture.loadFromFile(ts.getTile(tID)->imagePath);
+
+            sf::Sprite sprite;
+            sprite.setTexture(texture);
+            sprite.setPosition(pos.x, pos.y);
+            window.draw(sprite);
+        }
+
         window.display();
     }
 }
