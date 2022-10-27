@@ -9,7 +9,7 @@ using std::string;
 using std::unique_ptr;
 
 // Singleton class that manages all entities
-// One tileset for every object
+// Only one tileset for every object
 class EntityManager
 {
 public:
@@ -28,8 +28,6 @@ public:
     sf::Texture &getTextureFromPath(string filePath);
 
     void draw(sf::RenderWindow &window);
-
-    // void prepareRender();
 
 private:
     using Entities = std::vector<std::unique_ptr<Entity>>;

@@ -51,7 +51,6 @@ int main()
             }
         }
     }
-    // EntityManager::inst().prepareRender();
 
     unique_ptr<Player> pPlayer = make_unique<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"), "Player");
     EntityManager::inst().addPlayer(std::move(pPlayer));
@@ -103,32 +102,6 @@ int main()
             window.draw(*layer);
         }
         EntityManager::inst().draw(window);
-
-        // for (const auto &[layer, lEntities] : gameEntities)
-        // {
-        //     for (auto e : lEntities)
-        //     {
-        //         window.draw(*e);
-        //     }
-        // }
-        // const auto &objectLayer = gameMap.getLayers()[1]->getLayerAs<tmx::ObjectGroup>();
-        // const auto &objects = objectLayer.getObjects();
-        // for (const auto &object : objects)
-        // {
-        //     const auto rec = object.getAABB();
-        //     const auto pos = object.getPosition();
-
-        //     auto tID = object.getTileID();
-        //     auto &ts = gameMap.getTilesets()[1];
-        //     sf::Texture texture;
-        //     texture.loadFromFile(ts.getTile(tID)->imagePath);
-
-        //     sf::Sprite sprite;
-        //     sprite.setTexture(texture);
-        //     sprite.setPosition(pos.x, pos.y);
-        //     window.draw(sprite);
-        // }
-
         window.display();
     }
 }

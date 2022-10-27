@@ -39,14 +39,7 @@ public:
   // Virtual destructor
   virtual ~Entity() {}
 
-  friend bool operator<(const Entity &e1, const Entity &e2)
-  {
-    auto box1 = e1.getHitBox();
-    auto box2 = e2.getHitBox();
-    std::cout << e1.name << "is at " << box1.top + box1.height << " while "
-              << e2.name << " is at " << box2.top + box2.height << '\n';
-    return (box1.top + box1.height < box2.top + box2.height);
-  }
+  bool operator<(const Entity &other);
 };
 
 class StaticEntity : public Entity

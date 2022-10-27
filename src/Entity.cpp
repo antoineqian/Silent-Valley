@@ -19,7 +19,14 @@ sf::Vector2f Entity::getCentre() const noexcept
 }
 
 // bool operator<(const Entity &e1, const Entity &e2) const
-
+bool Entity::operator<(const Entity &other)
+{
+    auto box1 = this->getHitBox();
+    auto box2 = other.getHitBox();
+    // std::cout << this->name << "is at " << box1.top + box1.height << " while "
+    //           << other.name << " is at " << box2.top + box2.height << '\n';
+    return (box1.top + box1.height < box2.top + box2.height);
+}
 // STATIC ENTITY//
 
 StaticEntity::StaticEntity(int z, sf::Sprite sprite, string name) : Entity(z, name), sprite(sprite){};
