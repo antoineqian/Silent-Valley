@@ -7,7 +7,7 @@ using std::cout;
 // Initialize static data
 sf::Texture Player::texture;
 
-Player::Player(float x, float y, int z) : MovingEntity(z)
+Player::Player(float x, float y, int z, string name) : MovingEntity(z, name)
 {
     // Load the texture
     texture.loadFromFile("assets/complete_player_modernStyle.png");

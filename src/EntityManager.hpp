@@ -29,9 +29,14 @@ public:
 
     void draw(sf::RenderWindow &window);
 
+    // void prepareRender();
+
 private:
     using Entities = std::vector<std::unique_ptr<Entity>>;
-    Entities entities;
+    Entities allEntities;
+    using entityAliasVector = std::vector<Entity *>;
+    std::map<size_t, entityAliasVector> groupedEntities;
+
     unique_ptr<Player> player;
     using TextureResource = std::map<std::string, std::unique_ptr<sf::Texture>>;
     TextureResource textures;

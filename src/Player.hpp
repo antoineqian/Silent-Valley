@@ -20,7 +20,7 @@ private:
     void processPlayerInput();
 
 public:
-    Player(float x, float y, int z);
+    Player(float x, float y, int z, string name);
     ~Player();
 
     Player(const Player &) = delete;

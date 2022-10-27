@@ -1,8 +1,8 @@
 #include "Entity.hpp"
-#include <iostream>
+
 // using std::cout;
 
-Entity::Entity(int z) : zIndex(z)
+Entity::Entity(int z, string name) : zIndex(z), name(name)
 {
 }
 
@@ -18,9 +18,11 @@ sf::Vector2f Entity::getCentre() const noexcept
     return {box.width / 2.0f, box.height / 2.0f};
 }
 
+// bool operator<(const Entity &e1, const Entity &e2) const
+
 // STATIC ENTITY//
 
-StaticEntity::StaticEntity(int z, sf::Sprite sprite) : Entity(z), sprite(sprite){};
+StaticEntity::StaticEntity(int z, sf::Sprite sprite, string name) : Entity(z, name), sprite(sprite){};
 
 void StaticEntity::update()
 {
@@ -48,9 +50,14 @@ float StaticEntity::y() const noexcept
     return sprite.getPosition().y;
 }
 
+string StaticEntity::getName()
+{
+    return name;
+};
+
 // MOVING ENTITY//
 
-MovingEntity::MovingEntity(int z) : Entity(z), animatedSprite(sf::seconds(0.2), true, true) {}
+MovingEntity::MovingEntity(int z, string name) : Entity(z, name), animatedSprite(sf::seconds(0.2), true, true) {}
 
 sf::FloatRect MovingEntity::getBoundingBox() const
 {

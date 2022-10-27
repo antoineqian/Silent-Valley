@@ -6,6 +6,10 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include "animation/AnimatedSprite.hpp"
 
+#include <string>
+#include <iostream>
+
+using std::string;
 // Abstract base class to represent any graphical entity on the screen
 class Entity : public sf::Drawable
 {
@@ -13,7 +17,9 @@ protected:
   int zIndex;
 
 public:
-  Entity(int z);
+  string name;
+
+  Entity(int z, string name);
 
   // The update member function will compute the new position, appearance, etc of the object
   // The draw member function will cause the updated object to be displayed in the game window
@@ -32,6 +38,15 @@ public:
 
   // Virtual destructor
   virtual ~Entity() {}
+
+  friend bool operator<(const Entity &e1, const Entity &e2)
+  {
+    auto box1 = e1.getHitBox();
+    auto box2 = e2.getHitBox();
+    std::cout << e1.name << "is at " << box1.top + box1.height << " while "
+              << e2.name << " is at " << box2.top + box2.height << '\n';
+    return (box1.top + box1.height < box2.top + box2.height);
+  }
 };
 
 class StaticEntity : public Entity
@@ -40,13 +55,13 @@ protected:
   sf::Sprite sprite;
 
 public:
-  StaticEntity(int z, sf::Sprite sprite);
+  StaticEntity(int z, sf::Sprite sprite, string name);
   float x() const noexcept override;
   float y() const noexcept override;
   sf::FloatRect getBoundingBox() const override;
   void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
   void update() override;
-
+  string getName();
   virtual ~StaticEntity() {}
 };
 
@@ -54,7 +69,7 @@ public:
 class MovingEntity : public Entity
 {
 public:
-  MovingEntity(int z);
+  MovingEntity(int z, string name);
 
   float x() const noexcept override;
   float y() const noexcept override;
@@ -64,10 +79,8 @@ public:
 protected:
   AnimatedSprite animatedSprite;
 
-  sf::Vector2f velocity;
-
   // SFML vector to store the object's velocity
-  // This is the distance the ball moves between screen updates
+  sf::Vector2f velocity;
 };
 
 #endif // ENTITY_H
