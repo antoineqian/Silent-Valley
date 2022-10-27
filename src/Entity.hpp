@@ -22,7 +22,7 @@ public:
   // Helper function to get the bounding box of a sprite
   virtual sf::FloatRect getBoundingBox() const = 0;
   // Helper function to get the hitbox of an entity to handle collisions
-  virtual sf::FloatRect getHitBox() const = 0;
+  virtual sf::FloatRect getHitBox() const;
   // Helper function to get the centre of a sprite
   sf::Vector2f getCentre() const noexcept;
 
@@ -40,10 +40,12 @@ protected:
   sf::Sprite sprite;
 
 public:
-  StaticEntity(int z);
+  StaticEntity(int z, sf::Sprite sprite);
   float x() const noexcept override;
   float y() const noexcept override;
   sf::FloatRect getBoundingBox() const override;
+  void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+  void update() override;
 
   virtual ~StaticEntity() {}
 };

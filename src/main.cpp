@@ -10,6 +10,8 @@
 
 #include <tmxlite/Map.hpp>
 #include "Layer.hpp"
+
+#include "EntityManager.hpp"
 using std::make_shared;
 using std::make_unique;
 using std::map;
@@ -23,6 +25,14 @@ int main()
     tmx::Map gameMap;
     gameMap.load("assets/mainMap.tmx");
     const auto &tileSets = gameMap.getTilesets();
+    for (auto &ts : tileSets)
+    {
+        std::string s("Objects");
+        if (ts.getName() == s)
+        {
+            EntityManager::inst().setObjectTileset(ts);
+        }
+    }
 
     vector<unique_ptr<MapLayer>> mapLayers;
 
@@ -35,41 +45,14 @@ int main()
         if (gameMap.getLayers()[i]->getType() == tmx::Layer::Type::Object)
         {
             const auto &objectLayer = gameMap.getLayers()[i]->getLayerAs<tmx::ObjectGroup>();
-            const auto &objects = objectLayer.getObjects();
-            for (const auto &object : objects)
+            for (const auto &object : objectLayer.getObjects())
             {
-                const auto rec = object.getAABB();
-                const auto pos = object.getPosition();
-                std::cout << "Rec dimensions " << rec.top << " " << rec.left << " " << rec.height << " " << rec.width << '\n';
-                std::cout << "Rec pos " << pos.x << " " << pos.y << '\n';
-                std::cout << object.getTileID() << '\n';
-                std::cout << object.getTilesetName() << '\n';
-                // do stuff with object properties
+                EntityManager::inst().addObjectAsEntity(object);
             }
         }
     }
-    for (auto &ts : gameMap.getTilesets())
-    {
-        std::cout << ts.getFirstGID() << '\n';
-        std::cout << ts.getName() << " " << ts.getImagePath() << '\n';
-        if (ts.getName() == string("Objects"))
-        {
-            std::cout << "hello ";
-            std::cout << ts.getTile(2701)->imagePath;
-        }
-    }
-
-    // treeLayer.getImagePath()
-    // treeLayer.getTiles();
-    // const auto &layerIDs = gameMap.getLayers()[1]->getLayerAs<tmx::TileLayer>().getTiles();
-
-    map<int, vector<shared_ptr<Entity>>>
-        gameEntities;
-
-    // gameEntities[constants::layers.at("ground")].push_back(pMap);
-
-    shared_ptr<Player> pPlayer = make_shared<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"));
-    gameEntities[constants::layers.at("main")].push_back(pPlayer);
+    unique_ptr<Player> pPlayer = make_unique<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"));
+    EntityManager::inst().addPlayer(std::move(pPlayer));
 
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
@@ -94,7 +77,7 @@ int main()
     {
         // Clear the screen
         window.clear(sf::Color::Black);
-        view.setCenter(pPlayer->x(), pPlayer->y());
+        view.setCenter(EntityManager::inst().getPlayer().x(), EntityManager::inst().getPlayer().y());
         window.setView(view);
 
         // Check for any events since the last loop iteration
@@ -111,37 +94,38 @@ int main()
             window.close();
 
         // Calculate the updated graphics
-        pPlayer->update();
+        EntityManager::inst().getPlayer().update();
 
         for (auto &&layer : mapLayers)
         {
             window.draw(*layer);
         }
-        for (const auto &[layer, lEntities] : gameEntities)
-        {
-            for (auto e : lEntities)
-            {
-                // e->draw(window);
-                window.draw(*e);
-            }
-        }
-        const auto &objectLayer = gameMap.getLayers()[2]->getLayerAs<tmx::ObjectGroup>();
-        const auto &objects = objectLayer.getObjects();
-        for (const auto &object : objects)
-        {
-            const auto rec = object.getAABB();
-            const auto pos = object.getPosition();
+        EntityManager::inst().draw(window);
 
-            auto tID = object.getTileID();
-            auto &ts = gameMap.getTilesets()[1];
-            sf::Texture texture;
-            texture.loadFromFile(ts.getTile(tID)->imagePath);
+        // for (const auto &[layer, lEntities] : gameEntities)
+        // {
+        //     for (auto e : lEntities)
+        //     {
+        //         window.draw(*e);
+        //     }
+        // }
+        // const auto &objectLayer = gameMap.getLayers()[1]->getLayerAs<tmx::ObjectGroup>();
+        // const auto &objects = objectLayer.getObjects();
+        // for (const auto &object : objects)
+        // {
+        //     const auto rec = object.getAABB();
+        //     const auto pos = object.getPosition();
 
-            sf::Sprite sprite;
-            sprite.setTexture(texture);
-            sprite.setPosition(pos.x, pos.y);
-            window.draw(sprite);
-        }
+        //     auto tID = object.getTileID();
+        //     auto &ts = gameMap.getTilesets()[1];
+        //     sf::Texture texture;
+        //     texture.loadFromFile(ts.getTile(tID)->imagePath);
+
+        //     sf::Sprite sprite;
+        //     sprite.setTexture(texture);
+        //     sprite.setPosition(pos.x, pos.y);
+        //     window.draw(sprite);
+        // }
 
         window.display();
     }
