@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 
 #include <string>
-#include "Map.hpp"
 #include "Player.hpp"
 #include <iostream>
 #include <string>
@@ -11,6 +10,8 @@
 
 #include <tmxlite/Map.hpp>
 #include "Layer.hpp"
+
+#include "EntityManager.hpp"
 using std::make_shared;
 using std::make_unique;
 using std::map;
@@ -21,18 +22,19 @@ using namespace std::literals;
 
 int main()
 {
-
     tmx::Map gameMap;
     gameMap.load("assets/mainMap.tmx");
-    // const auto tilesets = gameMap.getTilesets();
-    vector<unique_ptr<MapLayer>> mapLayers;
+    const auto &tileSets = gameMap.getTilesets();
+    for (auto &ts : tileSets)
+    {
+        std::string s("Objects");
+        if (ts.getName() == s)
+        {
+            EntityManager::inst().setObjectTileset(ts);
+        }
+    }
 
-    // TODO: constants::window_width/window_height are actually hardcoded from this
-    // We should add objects like vegetation to prevent the player going anywhere near the limit
-    // of the map, and its black zone.
-    // auto mapSize = gameMap.getBounds();
-    // std::cout << mapSize.height << '\n'
-    //           << mapSize.width;
+    vector<unique_ptr<MapLayer>> mapLayers;
 
     for (std::size_t i = 0; i < gameMap.getLayers().size(); i++)
     {
@@ -40,15 +42,18 @@ int main()
         {
             mapLayers.push_back(make_unique<MapLayer>(gameMap, i));
         }
+        if (gameMap.getLayers()[i]->getType() == tmx::Layer::Type::Object)
+        {
+            const auto &objectLayer = gameMap.getLayers()[i]->getLayerAs<tmx::ObjectGroup>();
+            for (const auto &object : objectLayer.getObjects())
+            {
+                EntityManager::inst().addObjectAsEntity(object);
+            }
+        }
     }
 
-    map<int, vector<shared_ptr<Entity>>> gameEntities;
-
-    // shared_ptr<Map> pMap = make_shared<Map>("../assets/layer0.txt", constants::layers.at("ground"));
-    // gameEntities[constants::layers.at("ground")].push_back(pMap);
-
-    shared_ptr<Player> pPlayer = make_shared<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"));
-    gameEntities[constants::layers.at("main")].push_back(pPlayer);
+    unique_ptr<Player> pPlayer = make_unique<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"), "Player");
+    EntityManager::inst().addPlayer(std::move(pPlayer));
 
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
@@ -73,7 +78,7 @@ int main()
     {
         // Clear the screen
         window.clear(sf::Color::Black);
-        view.setCenter(pPlayer->x(), pPlayer->y());
+        view.setCenter(EntityManager::inst().getPlayer().x(), EntityManager::inst().getPlayer().y());
         window.setView(view);
 
         // Check for any events since the last loop iteration
@@ -90,19 +95,14 @@ int main()
             window.close();
 
         // Calculate the updated graphics
-        // pMap->update();
-        pPlayer->update();
+        EntityManager::inst().getPlayer().update();
+        EntityManager::inst().handleCollisions();
+
         for (auto &&layer : mapLayers)
         {
             window.draw(*layer);
         }
-        for (const auto &[layer, lEntities] : gameEntities)
-        {
-            for (auto e : lEntities)
-            {
-                e->draw(window);
-            }
-        }
+        EntityManager::inst().draw(window);
         window.display();
     }
 }

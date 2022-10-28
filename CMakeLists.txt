@@ -26,5 +26,5 @@ target_link_libraries(silentValley PRIVATE
     silentValleyLib
 )
 
-add_subdirectory(test)
+# add_subdirectory(test)
 

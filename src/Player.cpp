@@ -7,7 +7,7 @@ using std::cout;
 // Initialize static data
 sf::Texture Player::texture;
 
-Player::Player(float x, float y, int z) : MovingEntity(z)
+Player::Player(float x, float y, int z, string name) : MovingEntity(z, name)
 {
     // Load the texture
     texture.loadFromFile("assets/complete_player_modernStyle.png");
@@ -24,7 +24,7 @@ Player::Player(float x, float y, int z) : MovingEntity(z)
 
     // By default, operations are relative to the sprite's top lh corner
     // Make them relative to the sprite's centre
-    animatedSprite.setOrigin(getCentre());
+    // animatedSprite.setOrigin(getCentre());
 }
 
 Player::~Player()
@@ -36,10 +36,9 @@ void Player::update()
 { // Respond to user input as this will affect how the Player moves
     processPlayerInput();
 }
-
-void Player::draw(sf::RenderWindow &window) const
+void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    window.draw(animatedSprite);
+    target.draw(animatedSprite, states);
 }
 
 // Respond to input from the player
@@ -113,10 +112,18 @@ void Player::processPlayerInput()
     animatedSprite.update(frameTime);
 }
 
+sf::FloatRect Player::getBoundingBox() const
+{
+    auto box = animatedSprite.getGlobalBounds();
+    // std::cout << "Left :" << box.left << " / Top : " << box.top + 12 << '\n';
+    return {box.left, box.top + 12, constants::tile_size, constants::player_height};
+}
+
 sf::FloatRect Player::getHitBox() const
 {
     auto box = getBoundingBox();
     // std::cout << "Left :" << box.left << " / Top : " << box.top + 12 << '\n';
-
-    return {box.left, box.top + 12, 16, 20};
+    return {box.left + box.width * 0.1f, box.top + box.height * 0.7f, box.width * 0.8f, box.height * 0.3f};
+    // return box;
 }
+    
