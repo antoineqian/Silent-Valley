@@ -1,6 +1,7 @@
 #include "EntityManager.hpp"
 #include <tmxlite/Map.hpp>
 #include <iostream>
+#include <algorithm>
 using std::cout;
 using std::make_unique;
 EntityManager &EntityManager::inst()
@@ -95,7 +96,6 @@ void EntityManager::handleCollisions()
 {
     auto pHash = typeid(Player).hash_code();
     auto p = dynamic_cast<Player *>(groupedEntities[pHash][0]);
-    auto velocity = p->getVelocity();
     auto seHash = typeid(StaticEntity).hash_code();
     auto staticEntities = groupedEntities[seHash];
 
@@ -105,60 +105,59 @@ void EntityManager::handleCollisions()
         auto playerBox = p->getHitBox();
         if (entityBox.intersects(playerBox))
         {
+            auto eTop = entityBox.top;
+            auto eBottom = entityBox.top + entityBox.height;
+            auto eLeft = entityBox.left;
+            auto eRight = entityBox.left + entityBox.width;
+            auto pTop = playerBox.top;
+            auto pBottom = playerBox.top + playerBox.height;
+            auto pLeft = playerBox.left;
+            auto pRight = playerBox.left + playerBox.width;
+
+            auto BTOverlap = eBottom - pTop;
+            auto TBOverlap = pBottom - eTop;
+            auto RLOverlap = eRight - pLeft;
+            auto LROverlap = pRight - eLeft;
+
             auto currentPos = p->getPosition();
             float newX = currentPos.x;
             float newY = currentPos.y;
 
-            if (std::abs(velocity.x) > 0 && std::abs(velocity.y) == 0)
-            { // Horizontal movement
-                if (velocity.x > 0)
-                { // Moving right
-                    std::cout << "Collision moving right\n";
-                    std::cout << "EntityBox left : " << entityBox.left
-                              << ", PlayerBox right:  " << playerBox.left + playerBox.width
-                              << ", Player x:" << currentPos.x << '\n';
-                    newX = entityBox.left - playerBox.width - /**Diff between player x position and left hitbox */ 16 * 0.1f;
-                    // p->setPosition({entityBox.left - playerBox.width, currentPos.y});
-                }
-                else
-                { // Moving left
-                    std::cout << "Collision moving left\n";
-                    // std::cout << "EntityBox right : " << entityBox.left + entityBox.width
-                    //           << ", PlayerBox left:  " << playerBox.left
-                    //           << ", Player x:" << currentPos.x << '\n';
-                    newX = entityBox.left + entityBox.width - 16 * 0.1f;
-                    // p->setPosition({entityBox.left + entityBox.width - 16 * 0.1f, currentPos.y});
-                }
-                p->setPosition({newX, newY});
-                break;
-            }
-            else if (std::abs(velocity.y) > 0)
-            { // Vertical movement
-                if (velocity.y > 0)
-                { // Moving down
-                    std::cout << "Collision moving down\n";
-                    newY = entityBox.top - 32;
-                    //  p->setPosition({currentPos.x, entityBox.top - 32});
-                }
-                else
-                { // Moving up
-                    std::cout << "Collision moving up\n";
-                    std::cout << "EntityBox bottom : " << entityBox.top + entityBox.height
-                              << ", PlayerBox top:  " << playerBox.top
-                              << ", Player y:" << currentPos.y << '\n';
-                    std::cout << "EntityBox right : " << entityBox.left + entityBox.width
-                              << ", PlayerBox left:  " << playerBox.left
-                              << ", Player x:" << currentPos.x << '\n';
-                    newY = entityBox.top + entityBox.height - 0.7f * constants::player_height /**Diff between hitbox top and bounding box top*/
-                           - 12 /**Diff between top of sprite bounds and top of player bounds*/;
-                    // p->setPosition({currentPos.x, entityBox.top + entityBox.height - 0.7f * constants::player_height /**Diff between hitbox top and bounding box top*/
-                    //   - 12 /**Diff between top of sprite bounds and top of player bounds*/});
-                    std::cout << "New player hitbox top :" << p->getHitBox().top << "New y pos: " << newY << '\n';
-                }
-                // auto currentPos = p->getPosition();
-                // float newX = currentPos.x;
+            // TODO: The direction of the collision is defined by which Overlap is
+            // the minimum overlap greater than 0.
+            // Potential refactor. (sort sorts in place, so lower_bounds always points to the first element)
+            // vector<float> overlaps{BTOverlap, TBOverlap, RLOverlap, LROverlap};
+            // std::sort(overlaps.begin(), overlaps.end());
+            // auto lower = std::lower_bound(overlaps.begin(), overlaps.end(), 0);
+            // std::cout << BTOverlap << " " << TBOverlap << " " << RLOverlap << " " << LROverlap << '\n';
+            // std::cout << *lower << '\n';
+            // std::cout << std::distance(overlaps.begin(), lower) << '\n';
+
+            if (BTOverlap > 0 && BTOverlap < RLOverlap && BTOverlap < LROverlap && BTOverlap < TBOverlap) // Coming mainly up, even if some diagonal movement is involved
+            {
+                // std::cout << "Collision moving up\n";
+                newY = entityBox.top + entityBox.height - 0.7f * constants::player_height /**Diff between hitbox top and bounding box top*/
+                       - 12 /**Diff between top of sprite bounds and top of player bounds*/;
+
                 p->setPosition({currentPos.x, newY});
-                break;
+            }
+            else if (TBOverlap > 0 && TBOverlap < RLOverlap && TBOverlap < LROverlap && TBOverlap < BTOverlap) // Coming mainly down
+            {
+                // std::cout << "Collision moving down\n";
+                newY = entityBox.top - 32;
+                p->setPosition({currentPos.x, newY});
+            }
+            else if (RLOverlap > 0 && RLOverlap < TBOverlap && RLOverlap < LROverlap && RLOverlap < BTOverlap) // Coming mainly left
+            {
+                // std::cout << "Collision moving left\n";
+                newX = entityBox.left + entityBox.width - 16 * 0.1f;
+                p->setPosition({newX, currentPos.y});
+            }
+            else if (LROverlap > 0 && LROverlap < TBOverlap && LROverlap < RLOverlap && LROverlap < BTOverlap) // Coming mainly right
+            {
+                // std::cout << "Collision moving right\n";
+                newX = entityBox.left - playerBox.width - /**Diff between player x position and left hitbox */ 16 * 0.1f;
+                p->setPosition({newX, currentPos.y});
             }
         }
     }
