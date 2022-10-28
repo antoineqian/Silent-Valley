@@ -109,7 +109,7 @@ void EntityManager::handleCollisions()
             float newX = currentPos.x;
             float newY = currentPos.y;
 
-            if (std::abs(velocity.x) > 0)
+            if (std::abs(velocity.x) > 0 && std::abs(velocity.y) == 0)
             { // Horizontal movement
                 if (velocity.x > 0)
                 { // Moving right
@@ -123,12 +123,14 @@ void EntityManager::handleCollisions()
                 else
                 { // Moving left
                     std::cout << "Collision moving left\n";
-                    std::cout << "EntityBox right : " << entityBox.left + entityBox.width
-                              << ", PlayerBox left:  " << playerBox.left
-                              << ", Player x:" << currentPos.x << '\n';
+                    // std::cout << "EntityBox right : " << entityBox.left + entityBox.width
+                    //           << ", PlayerBox left:  " << playerBox.left
+                    //           << ", Player x:" << currentPos.x << '\n';
                     newX = entityBox.left + entityBox.width - 16 * 0.1f;
                     // p->setPosition({entityBox.left + entityBox.width - 16 * 0.1f, currentPos.y});
                 }
+                p->setPosition({newX, newY});
+                break;
             }
             else if (std::abs(velocity.y) > 0)
             { // Vertical movement
@@ -141,16 +143,23 @@ void EntityManager::handleCollisions()
                 else
                 { // Moving up
                     std::cout << "Collision moving up\n";
-                    // std::cout << "EntityBox bottom : " << entityBox.top + entityBox.height
-                    //           << ", PlayerBox top:  " << playerBox.top
-                    //           << ", Player y:" << currentPos.y << '\n';
+                    std::cout << "EntityBox bottom : " << entityBox.top + entityBox.height
+                              << ", PlayerBox top:  " << playerBox.top
+                              << ", Player y:" << currentPos.y << '\n';
+                    std::cout << "EntityBox right : " << entityBox.left + entityBox.width
+                              << ", PlayerBox left:  " << playerBox.left
+                              << ", Player x:" << currentPos.x << '\n';
                     newY = entityBox.top + entityBox.height - 0.7f * constants::player_height /**Diff between hitbox top and bounding box top*/
                            - 12 /**Diff between top of sprite bounds and top of player bounds*/;
                     // p->setPosition({currentPos.x, entityBox.top + entityBox.height - 0.7f * constants::player_height /**Diff between hitbox top and bounding box top*/
                     //   - 12 /**Diff between top of sprite bounds and top of player bounds*/});
+                    std::cout << "New player hitbox top :" << p->getHitBox().top << "New y pos: " << newY << '\n';
                 }
+                // auto currentPos = p->getPosition();
+                // float newX = currentPos.x;
+                p->setPosition({currentPos.x, newY});
+                break;
             }
-            p->setPosition({newX, newY});
         }
     }
 }
