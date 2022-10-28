@@ -33,8 +33,8 @@ sf::Texture &EntityManager::getTextureFromPath(string filePath)
 
 void EntityManager::addObjectAsEntity(const tmx::Object &object)
 {
-    // const auto rec = object.getAABB();
     const auto pos = object.getPosition();
+
     // std::cout << "Rec dimensions " << rec.top << " " << rec.left << " " << rec.height << " " << rec.width << '\n';
     // std::cout << object.getName() << '\n';
     // std::cout << "pos " << pos.x << " " << pos.y << '\n';
@@ -66,7 +66,6 @@ void EntityManager::addPlayer(unique_ptr<Player> pPlayer)
     groupedEntities[hash].emplace_back(ptr_alias);
 
     allEntities.push_back(std::move(pPlayer));
-    // player = std::move(pPlayer);
 }
 
 Player &EntityManager::getPlayer()
@@ -86,8 +85,6 @@ void EntityManager::draw(sf::RenderWindow &window)
 
     for (auto &&entity : allEntities)
     {
-        // auto box = entity->getHitBox();
-        // std::cout << entity->name << " y pos " << box.top + box.height << '\n';
         window.draw(*entity);
     }
 };
