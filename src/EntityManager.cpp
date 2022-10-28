@@ -32,7 +32,7 @@ sf::Texture &EntityManager::getTextureFromPath(string filePath)
 
 void EntityManager::addObjectAsEntity(const tmx::Object &object)
 {
-    const auto rec = object.getAABB();
+    // const auto rec = object.getAABB();
     const auto pos = object.getPosition();
     // std::cout << "Rec dimensions " << rec.top << " " << rec.left << " " << rec.height << " " << rec.width << '\n';
     // std::cout << object.getName() << '\n';
@@ -90,3 +90,54 @@ void EntityManager::draw(sf::RenderWindow &window)
         window.draw(*entity);
     }
 };
+
+void EntityManager::handleCollisions()
+{
+    auto pHash = typeid(Player).hash_code();
+    auto p = dynamic_cast<Player *>(groupedEntities[pHash][0]);
+    auto velocity = p->getVelocity();
+    auto seHash = typeid(StaticEntity).hash_code();
+    auto staticEntities = groupedEntities[seHash];
+
+    for (auto &&ptrEntity : staticEntities)
+    {
+        auto currentPos = p->getPosition();
+        auto entityBox = ptrEntity->getHitBox();
+        auto playerBox = p->getHitBox();
+        if (entityBox.intersects(playerBox))
+        {
+            if (std::abs(velocity.x) > 0)
+            { // Horizontal movement
+                if (velocity.x > 0)
+                { // Moving right
+                    std::cout << "Collision moving right\n";
+                    p->setPosition({entityBox.left - playerBox.width, currentPos.y});
+                }
+                else
+                { // Moving left
+                    std::cout << "Collision moving right\n";
+                    p->setPosition({entityBox.left + entityBox.width - 16 * 0.1f, currentPos.y});
+                }
+            }
+            auto currentPos = p->getPosition();
+            if (std::abs(velocity.y) > 0)
+            { // Vertical movement
+                if (velocity.y > 0)
+                { // Moving down
+                    std::cout << "Collision moving down\n";
+
+                    p->setPosition({currentPos.x, entityBox.top - 32});
+                }
+                else
+                { // Moving up
+                    std::cout << "Collision moving up\n";
+                    std::cout << "EntityBox bottom : " << entityBox.top + entityBox.height
+                              << ", PlayerBox top:  " << playerBox.top
+                              << ", Player y:" << currentPos.y << '\n';
+                    p->setPosition({currentPos.x, entityBox.top + entityBox.height - 0.7f * constants::player_height /**Diff between hitbox top and bounding box top*/
+                                                      - 12 /**Diff between top of sprite bounds and top of player bounds*/});
+                }
+            }
+        }
+    }
+}

@@ -67,7 +67,12 @@ public:
   float x() const noexcept override;
   float y() const noexcept override;
   sf::FloatRect getBoundingBox() const override;
+  sf::Vector2f getVelocity() const;
   virtual ~MovingEntity() {}
+
+  // TODO: Make this a friend of EntityManger
+  void setPosition(sf::Vector2f position);
+  sf::Vector2f getPosition() const;
 
 protected:
   AnimatedSprite animatedSprite;

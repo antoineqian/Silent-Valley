@@ -31,4 +31,5 @@ public:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     void update() override;
     sf::FloatRect getHitBox() const override;
+    sf::FloatRect getBoundingBox() const override;
 };

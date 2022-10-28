@@ -8,7 +8,8 @@ Entity::Entity(int z, string name) : zIndex(z), name(name)
 
 sf::FloatRect Entity::getHitBox() const
 {
-    return getBoundingBox();
+    auto box = getBoundingBox();
+    return {box.left + box.width * 0.1f, box.top + box.height * 0.7f, box.width * 0.8f, box.height * 0.3f};
 }
 
 // Helper function to get the centre of a sprite
@@ -21,8 +22,8 @@ sf::Vector2f Entity::getCentre() const noexcept
 // bool operator<(const Entity &e1, const Entity &e2) const
 bool Entity::operator<(const Entity &other)
 {
-    auto box1 = this->getHitBox();
-    auto box2 = other.getHitBox();
+    auto box1 = this->getBoundingBox();
+    auto box2 = other.getBoundingBox();
     // std::cout << this->name << "is at " << box1.top + box1.height << " while "
     //           << other.name << " is at " << box2.top + box2.height << '\n';
     return (box1.top + box1.height < box2.top + box2.height);
@@ -82,4 +83,19 @@ float MovingEntity::y() const noexcept
 {
     // std::cout << "y :" << animatedSprite.getPosition().y << " \n ";
     return animatedSprite.getPosition().y;
+}
+
+sf::Vector2f MovingEntity::getVelocity() const
+{
+    return velocity;
+}
+
+void MovingEntity::setPosition(sf::Vector2f position)
+{
+    animatedSprite.setPosition(position);
+}
+
+sf::Vector2f MovingEntity::getPosition() const
+{
+    return animatedSprite.getPosition();
 }

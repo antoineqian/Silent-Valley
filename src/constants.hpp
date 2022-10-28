@@ -19,6 +19,7 @@ struct constants
   static constexpr int window_height{40 * 16}; // = 640
   static constexpr int tile_size{16};
   static constexpr float player_speed{1.0f};
+  static constexpr int player_height{20};
 
   static const unordered_map<char, sf::Vector2<int>> tilePositionsInMap;
 

@@ -96,6 +96,7 @@ int main()
 
         // Calculate the updated graphics
         EntityManager::inst().getPlayer().update();
+        EntityManager::inst().handleCollisions();
 
         for (auto &&layer : mapLayers)
         {

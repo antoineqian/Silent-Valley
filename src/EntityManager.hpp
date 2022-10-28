@@ -28,6 +28,7 @@ public:
     sf::Texture &getTextureFromPath(string filePath);
 
     void draw(sf::RenderWindow &window);
+    void handleCollisions();
 
 private:
     using Entities = std::vector<std::unique_ptr<Entity>>;
