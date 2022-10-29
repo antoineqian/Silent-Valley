@@ -2,16 +2,17 @@
 #include "AnimatedSprite.hpp"
 #include <string>
 #include <unordered_map>
+using std::shared_ptr;
 using std::string;
 using std::unordered_map;
 
 class AnimationAdapter
 {
 private:
-    sf::Texture &texture;
+    shared_ptr<sf::Texture> texture;
 
 public:
-    AnimationAdapter(sf::Texture &texture);
+    AnimationAdapter(shared_ptr<sf::Texture> texture);
 
     unordered_map<string, Animation> getAnimations();
 };

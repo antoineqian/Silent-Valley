@@ -5,7 +5,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include "animation/AnimatedSprite.hpp"
-
+#include "constants.hpp"
 #include <string>
 #include <iostream>
 
@@ -14,6 +14,8 @@ using std::string;
 class Entity : public sf::Drawable
 {
 protected:
+  static inline int idGenerator{0};
+  int id;
   int zIndex;
   string name;
 
@@ -73,13 +75,12 @@ public:
 
 protected:
   AnimatedSprite animatedSprite;
-
+  unordered_map<string, Animation> animations;
+  Animation currentAnimation;
+  sf::Texture texture;
+  sf::Clock frameClock;
   // SFML vector to store the object's velocity
   sf::Vector2f velocity;
 };
 
-class Human : MovingEntity
-{
-protected:
-}
 #endif // ENTITY_H

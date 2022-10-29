@@ -31,6 +31,10 @@ sf::Texture &EntityManager::getTextureFromPath(string filePath)
     return *(textures[filePath]);
 }
 
+// void EntityManager::addNPCEntity(string filePath)
+// {
+// }
+
 void EntityManager::addObjectAsEntity(const tmx::Object &object)
 {
     const auto pos = object.getPosition();

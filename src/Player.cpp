@@ -4,11 +4,9 @@ using std::abs;
 #include <iostream>
 using std::cout;
 
-// Initialize static data
-sf::Texture Player::texture;
-
 Player::Player(float x, float y, int z, string name) : MovingEntity(z, name)
 {
+    std::shared_ptr<sf::Texture> pTexture = make_shared<sf::Texture>();
     // Load the texture
     texture.loadFromFile("assets/complete_player_modernStyle.png");
     AnimationAdapter adapter(texture);
@@ -20,11 +18,7 @@ Player::Player(float x, float y, int z, string name) : MovingEntity(z, name)
     animatedSprite.setAnimation(currentAnimation);
 
     // Set the velocity of the Player
-    velocity = {constants::player_speed, constants::player_speed}; // The Player can only move sideways
-
-    // By default, operations are relative to the sprite's top lh corner
-    // Make them relative to the sprite's centre
-    // animatedSprite.setOrigin(getCentre());
+    velocity = {constants::player_speed, constants::player_speed};
 }
 
 Player::~Player()
@@ -47,7 +41,7 @@ void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
 // If the player presses the down arrow key, move down (negative velocity)
 // If the player presses the up arrow key, move up (positive velocity)
 // Otherwise, do not move (zero velocity)
-// Do not allow the Player to move off the
+// Do not allow the Player to move off the screen
 // Play animation according to direction of movement
 void Player::processPlayerInput()
 {
@@ -126,4 +120,3 @@ sf::FloatRect Player::getHitBox() const
     return {box.left + box.width * 0.1f, box.top + box.height * 0.7f, box.width * 0.8f, box.height * 0.3f};
     // return box;
 }
-    

@@ -11,11 +11,6 @@ using std::vector;
 class Player : public MovingEntity
 {
 private:
-    unordered_map<string, Animation> animations;
-    Animation currentAnimation;
-    static sf::Texture texture;
-    sf::Clock frameClock;
-
     void processPlayerInput();
 
 public:

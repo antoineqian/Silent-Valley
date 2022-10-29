@@ -2,7 +2,7 @@
 
 // using std::cout;
 
-Entity::Entity(int z, string name) : zIndex(z), name(name)
+Entity::Entity(int z, string name) : id(idGenerator++), zIndex(z), name(name)
 {
 }
 
@@ -28,6 +28,7 @@ bool Entity::operator<(const Entity &other)
     //           << other.name << " is at " << box2.top + box2.height << '\n';
     return (box1.top + box1.height < box2.top + box2.height);
 }
+
 // STATIC ENTITY//
 
 StaticEntity::StaticEntity(int z, sf::Sprite sprite, string name) : Entity(z, name), sprite(sprite){};
