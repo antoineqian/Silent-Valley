@@ -5,7 +5,7 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include "animation/AnimatedSprite.hpp"
-
+#include "constants.hpp"
 #include <string>
 #include <iostream>
 
@@ -14,6 +14,8 @@ using std::string;
 class Entity : public sf::Drawable
 {
 protected:
+  static inline int idGenerator{0};
+  int id;
   int zIndex;
   string name;
 
@@ -60,7 +62,9 @@ public:
 class MovingEntity : public Entity
 {
 public:
-  MovingEntity(int z, string name);
+  MovingEntity(
+      int z,
+      string name);
 
   float x() const noexcept override;
   float y() const noexcept override;
@@ -71,9 +75,13 @@ public:
   void setPosition(sf::Vector2f position);
   sf::Vector2f getPosition() const;
 
+  void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
 protected:
   AnimatedSprite animatedSprite;
-
+  unordered_map<string, Animation> animations;
+  Animation currentAnimation;
+  sf::Clock frameClock;
   // SFML vector to store the object's velocity
   sf::Vector2f velocity;
 };

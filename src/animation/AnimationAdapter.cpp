@@ -1,11 +1,11 @@
 
 #include "AnimationAdapter.hpp"
 
-AnimationAdapter::AnimationAdapter(sf::Texture &texture) : texture(texture)
-{
-}
+// AnimationAdapter::AnimationAdapter(sf::Texture &texture) : texture(texture)
+// {
+// }
 
-unordered_map<string, Animation> AnimationAdapter::getAnimations()
+unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &texture)
 {
     unordered_map<string, Animation> animations;
     // set up the animations for all four directions (set spritesheet and push frames)

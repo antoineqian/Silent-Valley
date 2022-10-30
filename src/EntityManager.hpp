@@ -3,6 +3,7 @@
 #include <tmxlite/Map.hpp>
 #include "Entity.hpp"
 #include "Player.hpp"
+#include "Raver.hpp"
 #include <memory>
 #include <string>
 using std::string;
@@ -18,16 +19,19 @@ public:
     EntityManager(EntityManager &&) = delete;
     EntityManager &operator=(EntityManager &&) = delete;
 
+    // Singleton instance
     static EntityManager &inst();
 
     void addTextureFromPath(string filePath);
     void addObjectAsEntity(const tmx::Object &object);
-    void addPlayer(unique_ptr<Player> pPlayer);
+    void addPlayer(string filePath);
+    void addRaver(float x, float y, string filePath);
     Player &getPlayer();
     void setObjectTileset(const tmx::Tileset &ts);
     sf::Texture &getTextureFromPath(string filePath);
 
     void draw(sf::RenderWindow &window);
+    void update();
     void handleCollisions();
 
 private:
@@ -37,7 +41,7 @@ private:
     std::map<size_t, entityAliasVector> groupedEntities;
 
     unique_ptr<Player> player;
-    using TextureResource = std::map<std::string, std::unique_ptr<sf::Texture>>;
+    using TextureResource = std::map<std::string, std::shared_ptr<sf::Texture>>;
     TextureResource textures;
     unique_ptr<const tmx::Tileset> objectTileSet = nullptr;
     EntityManager();

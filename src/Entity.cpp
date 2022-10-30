@@ -2,7 +2,7 @@
 
 // using std::cout;
 
-Entity::Entity(int z, string name) : zIndex(z), name(name)
+Entity::Entity(int z, string name) : id(idGenerator++), zIndex(z), name(name)
 {
 }
 
@@ -28,6 +28,7 @@ bool Entity::operator<(const Entity &other)
     //           << other.name << " is at " << box2.top + box2.height << '\n';
     return (box1.top + box1.height < box2.top + box2.height);
 }
+
 // STATIC ENTITY//
 
 StaticEntity::StaticEntity(int z, sf::Sprite sprite, string name) : Entity(z, name), sprite(sprite){};
@@ -65,7 +66,8 @@ string StaticEntity::getName()
 
 // MOVING ENTITY//
 
-MovingEntity::MovingEntity(int z, string name) : Entity(z, name), animatedSprite(sf::seconds(0.2), true, true) {}
+MovingEntity::MovingEntity(int z, string name)
+    : Entity(z, name), animatedSprite(sf::seconds(0.2), true, true) {}
 
 sf::FloatRect MovingEntity::getBoundingBox() const
 {
@@ -83,6 +85,11 @@ float MovingEntity::y() const noexcept
 {
     // std::cout << "y :" << animatedSprite.getPosition().y << " \n ";
     return animatedSprite.getPosition().y;
+}
+
+void MovingEntity::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    target.draw(animatedSprite, states);
 }
 
 sf::Vector2f MovingEntity::getVelocity() const
