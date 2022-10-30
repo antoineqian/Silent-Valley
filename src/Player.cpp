@@ -3,13 +3,15 @@
 using std::abs;
 #include <iostream>
 using std::cout;
+using std::make_shared;
 
 Player::Player(float x, float y, int z, string name) : MovingEntity(z, name)
 {
     std::shared_ptr<sf::Texture> pTexture = make_shared<sf::Texture>();
+    pTexture->loadFromFile("assets/complete_player_modernStyle.png");
     // Load the texture
-    texture.loadFromFile("assets/complete_player_modernStyle.png");
-    AnimationAdapter adapter(texture);
+    // texture.loadFromFile();
+    AnimationAdapter adapter(pTexture);
     animations = adapter.getAnimations();
 
     // Set the initial position of the Player
