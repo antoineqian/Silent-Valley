@@ -62,7 +62,11 @@ public:
 class MovingEntity : public Entity
 {
 public:
-  MovingEntity(int z, string name);
+  MovingEntity(
+      int z,
+      AnimatedSprite animatedSprite,
+      unordered_map<string, Animation> animations,
+      string name);
 
   float x() const noexcept override;
   float y() const noexcept override;
@@ -77,7 +81,6 @@ protected:
   AnimatedSprite animatedSprite;
   unordered_map<string, Animation> animations;
   Animation currentAnimation;
-  sf::Texture texture;
   sf::Clock frameClock;
   // SFML vector to store the object's velocity
   sf::Vector2f velocity;

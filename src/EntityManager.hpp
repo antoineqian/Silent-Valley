@@ -18,11 +18,12 @@ public:
     EntityManager(EntityManager &&) = delete;
     EntityManager &operator=(EntityManager &&) = delete;
 
+    // Singleton instance
     static EntityManager &inst();
 
     void addTextureFromPath(string filePath);
     void addObjectAsEntity(const tmx::Object &object);
-    void addPlayer(unique_ptr<Player> pPlayer);
+    void addPlayer(string filePath);
     Player &getPlayer();
     void setObjectTileset(const tmx::Tileset &ts);
     sf::Texture &getTextureFromPath(string filePath);

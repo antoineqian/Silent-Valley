@@ -9,10 +9,10 @@ using std::unordered_map;
 class AnimationAdapter
 {
 private:
-    shared_ptr<sf::Texture> texture;
+    // shared_ptr<sf::Texture> texture;
 
 public:
-    AnimationAdapter(shared_ptr<sf::Texture> texture);
+    // AnimationAdapter(shared_ptr<sf::Texture> texture);
 
-    unordered_map<string, Animation> getAnimations();
+    static unordered_map<string, Animation> getAnimations(sf::Texture &texture);
 };

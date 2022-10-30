@@ -3,7 +3,9 @@
 #include <iostream>
 #include <algorithm>
 using std::cout;
+using std::make_shared;
 using std::make_unique;
+
 EntityManager &EntityManager::inst()
 {
     static EntityManager mgr;
@@ -62,8 +64,19 @@ void EntityManager::addObjectAsEntity(const tmx::Object &object)
     allEntities.push_back(std::move(ptr));
 }
 
-void EntityManager::addPlayer(unique_ptr<Player> pPlayer)
+void EntityManager::addPlayer(string filePath)
 {
+    EntityManager::inst().addTextureFromPath(filePath);
+    auto animations = AnimationAdapter::getAnimations(EntityManager::inst().getTextureFromPath(filePath));
+    AnimatedSprite animatedSprite(sf::seconds(0.2), true, true);
+    animatedSprite.setPosition(constants::window_width / 2,
+                               constants::window_height / 2);
+
+    auto pPlayer = make_unique<Player>(
+        constants::layers.at("main"),
+        animatedSprite,
+        animations,
+        "Player");
     auto ptr_alias = pPlayer.get();
     // Get the hash code for the entity object's type
     auto hash = typeid(Player).hash_code();
@@ -71,6 +84,16 @@ void EntityManager::addPlayer(unique_ptr<Player> pPlayer)
 
     allEntities.push_back(std::move(pPlayer));
 }
+
+// void EntityManager::addPlayer(unique_ptr<Player> pPlayer)
+// {
+//     auto ptr_alias = pPlayer.get();
+//     // Get the hash code for the entity object's type
+//     auto hash = typeid(Player).hash_code();
+//     groupedEntities[hash].emplace_back(ptr_alias);
+
+//     allEntities.push_back(std::move(pPlayer));
+// }
 
 Player &EntityManager::getPlayer()
 {

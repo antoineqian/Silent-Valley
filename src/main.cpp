@@ -52,8 +52,8 @@ int main()
         }
     }
 
-    unique_ptr<Player> pPlayer = make_unique<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"), "Player");
-    EntityManager::inst().addPlayer(std::move(pPlayer));
+    // unique_ptr<Player> pPlayer = make_unique<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"), "Player");
+    EntityManager::inst().addPlayer("assets/complete_player_modernStyle.png");
 
     // Create the game's window using an object of class RenderWindow
     // The constructor takes an SFML 2D vector with the window dimensions
