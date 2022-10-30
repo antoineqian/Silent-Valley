@@ -33,10 +33,6 @@ sf::Texture &EntityManager::getTextureFromPath(string filePath)
     return *(textures[filePath]);
 }
 
-// void EntityManager::addNPCEntity(string filePath)
-// {
-// }
-
 void EntityManager::addObjectAsEntity(const tmx::Object &object)
 {
     const auto pos = object.getPosition();
@@ -67,10 +63,6 @@ void EntityManager::addObjectAsEntity(const tmx::Object &object)
 void EntityManager::addPlayer(string filePath)
 {
     EntityManager::inst().addTextureFromPath(filePath);
-    // auto animations = AnimationAdapter::getAnimations(EntityManager::inst().getTextureFromPath(filePath));
-    // AnimatedSprite animatedSprite(sf::seconds(0.2), true, true);
-    // animatedSprite.setPosition(constants::window_width / 2,
-    //                            constants::window_height / 2);
 
     auto pPlayer = make_unique<Player>(
         constants::window_width / 2,
@@ -86,14 +78,8 @@ void EntityManager::addPlayer(string filePath)
     allEntities.push_back(std::move(pPlayer));
 }
 
-// void EntityManager::addPlayer(unique_ptr<Player> pPlayer)
+// void EntityManager::addNPCEntity(string filePath)
 // {
-//     auto ptr_alias = pPlayer.get();
-//     // Get the hash code for the entity object's type
-//     auto hash = typeid(Player).hash_code();
-//     groupedEntities[hash].emplace_back(ptr_alias);
-
-//     allEntities.push_back(std::move(pPlayer));
 // }
 
 Player &EntityManager::getPlayer()

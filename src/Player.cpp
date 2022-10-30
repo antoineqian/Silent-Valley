@@ -5,22 +5,8 @@ using std::abs;
 using std::cout;
 using std::make_shared;
 
-Player::Player(float x, float y, int z, sf::Texture &texture, string name) : MovingEntity(z, name)
+Player::Player(float x, float y, int z, sf::Texture &texture, string name) : Human(x, y, z, texture, name)
 {
-    // texture.loadFromFile("assets/complete_player_modernStyle.png");
-    animations = AnimationAdapter::getAnimations(texture);
-    // animations = adapter.getAnimations();
-
-    // Set the initial position of the Player
-    animatedSprite.setPosition(x, y);
-    currentAnimation = animations["down"];
-    animatedSprite.setAnimation(currentAnimation);
-
-    // currentAnimation = this->animations["down"];
-    // animatedSprite.setAnimation(currentAnimation);
-
-    // Set the velocity of the Player
-    velocity = {constants::player_speed, constants::player_speed};
 }
 
 Player::~Player()
