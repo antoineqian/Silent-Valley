@@ -64,8 +64,6 @@ class MovingEntity : public Entity
 public:
   MovingEntity(
       int z,
-      AnimatedSprite animatedSprite,
-      unordered_map<string, Animation> animations,
       string name);
 
   float x() const noexcept override;

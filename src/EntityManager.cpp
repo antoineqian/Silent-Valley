@@ -67,15 +67,16 @@ void EntityManager::addObjectAsEntity(const tmx::Object &object)
 void EntityManager::addPlayer(string filePath)
 {
     EntityManager::inst().addTextureFromPath(filePath);
-    auto animations = AnimationAdapter::getAnimations(EntityManager::inst().getTextureFromPath(filePath));
-    AnimatedSprite animatedSprite(sf::seconds(0.2), true, true);
-    animatedSprite.setPosition(constants::window_width / 2,
-                               constants::window_height / 2);
+    // auto animations = AnimationAdapter::getAnimations(EntityManager::inst().getTextureFromPath(filePath));
+    // AnimatedSprite animatedSprite(sf::seconds(0.2), true, true);
+    // animatedSprite.setPosition(constants::window_width / 2,
+    //                            constants::window_height / 2);
 
     auto pPlayer = make_unique<Player>(
+        constants::window_width / 2,
+        constants::window_height / 2,
         constants::layers.at("main"),
-        animatedSprite,
-        animations,
+        EntityManager::inst().getTextureFromPath(filePath),
         "Player");
     auto ptr_alias = pPlayer.get();
     // Get the hash code for the entity object's type

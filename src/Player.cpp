@@ -5,10 +5,19 @@ using std::abs;
 using std::cout;
 using std::make_shared;
 
-Player::Player(int z, AnimatedSprite animatedSprite, unordered_map<string, Animation> animations, string name) : MovingEntity(z, animatedSprite, animations, name)
+Player::Player(float x, float y, int z, sf::Texture &texture, string name) : MovingEntity(z, name)
 {
-    currentAnimation = this->animations["down"];
+    // texture.loadFromFile("assets/complete_player_modernStyle.png");
+    animations = AnimationAdapter::getAnimations(texture);
+    // animations = adapter.getAnimations();
+
+    // Set the initial position of the Player
+    animatedSprite.setPosition(x, y);
+    currentAnimation = animations["down"];
     animatedSprite.setAnimation(currentAnimation);
+
+    // currentAnimation = this->animations["down"];
+    // animatedSprite.setAnimation(currentAnimation);
 
     // Set the velocity of the Player
     velocity = {constants::player_speed, constants::player_speed};

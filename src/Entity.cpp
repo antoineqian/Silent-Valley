@@ -66,8 +66,8 @@ string StaticEntity::getName()
 
 // MOVING ENTITY//
 
-MovingEntity::MovingEntity(int z, AnimatedSprite animatedSprite, unordered_map<string, Animation> animations, string name)
-    : Entity(z, name), animatedSprite(animatedSprite), animations(animations) {}
+MovingEntity::MovingEntity(int z, string name)
+    : Entity(z, name), animatedSprite(sf::seconds(0.2), true, true) {}
 
 sf::FloatRect MovingEntity::getBoundingBox() const
 {

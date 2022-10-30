@@ -38,7 +38,7 @@ private:
     std::map<size_t, entityAliasVector> groupedEntities;
 
     unique_ptr<Player> player;
-    using TextureResource = std::map<std::string, std::unique_ptr<sf::Texture>>;
+    using TextureResource = std::map<std::string, std::shared_ptr<sf::Texture>>;
     TextureResource textures;
     unique_ptr<const tmx::Tileset> objectTileSet = nullptr;
     EntityManager();

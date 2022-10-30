@@ -14,8 +14,7 @@ private:
     void processPlayerInput();
 
 public:
-    Player(int z, AnimatedSprite animatedSprite,
-           unordered_map<string, Animation> animations, string name);
+    Player(float x, float y, int z, sf::Texture &texture, string name);
     ~Player();
 
     Player(const Player &) = delete;
