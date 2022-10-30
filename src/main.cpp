@@ -58,6 +58,8 @@ int main()
     EntityManager::inst().addRaver(constants::window_width / 3, constants::window_height / 3, "assets/Premade_Character_07.png");
     EntityManager::inst().addRaver(constants::window_width / 3, 2 * constants::window_height / 3, "assets/Premade_Character_07.png");
 
+    // CHeck if target
+
     // Create the game's window using an object of class RenderWindow
     sf::RenderWindow window{{constants::window_width, constants::window_height},
                             "Silent Valley Game"};
@@ -95,7 +97,7 @@ int main()
             window.close();
 
         // Calculate the updated graphics
-        EntityManager::inst().getPlayer().update();
+        EntityManager::inst().update();
         EntityManager::inst().handleCollisions();
 
         for (auto &&layer : mapLayers)

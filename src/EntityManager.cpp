@@ -46,9 +46,9 @@ void EntityManager::addObjectAsEntity(const tmx::Object &object)
 
     auto tID = object.getTileID();
     auto path = objectTileSet->getTile(tID)->imagePath;
-    EntityManager::inst().addTextureFromPath(path);
+    addTextureFromPath(path);
     sf::Sprite sprite;
-    sprite.setTexture(EntityManager::inst().getTextureFromPath(path));
+    sprite.setTexture(getTextureFromPath(path));
     sprite.setPosition(pos.x, pos.y);
 
     auto ptr = make_unique<StaticEntity>(1, sprite, object.getName());
@@ -62,13 +62,13 @@ void EntityManager::addObjectAsEntity(const tmx::Object &object)
 
 void EntityManager::addPlayer(string filePath)
 {
-    EntityManager::inst().addTextureFromPath(filePath);
+    addTextureFromPath(filePath);
 
     auto pPlayer = make_unique<Player>(
         constants::window_width / 2,
         constants::window_height / 2,
         constants::layers.at("main"),
-        EntityManager::inst().getTextureFromPath(filePath),
+        getTextureFromPath(filePath),
         "Player");
     auto ptr_alias = pPlayer.get();
     // Get the hash code for the entity object's type
@@ -80,14 +80,16 @@ void EntityManager::addPlayer(string filePath)
 
 void EntityManager::addRaver(float x, float y, string filePath)
 {
-    EntityManager::inst().addTextureFromPath(filePath);
+    addTextureFromPath(filePath);
 
     auto pRaver = make_unique<Raver>(
         x,
         y,
         constants::layers.at("main"),
-        EntityManager::inst().getTextureFromPath(filePath),
+        getTextureFromPath(filePath),
         "Raver");
+    // pRaver->setTarget({constants::window_width / 2.f,
+    //                    constants::window_height / 2.f});
     auto ptr_alias = pRaver.get();
 
     // Get the hash code for the entity object's type
@@ -200,5 +202,16 @@ void EntityManager::handleCollisions()
     for (auto &&raver : ravers)
     {
         doHandleCollisions(p, dynamic_cast<Raver *>(raver));
+    }
+}
+
+void EntityManager::update()
+{
+    getPlayer().update();
+    auto rHash = typeid(Raver).hash_code();
+    auto ravers = groupedEntities[rHash];
+    for (auto &&raver : ravers)
+    {
+        raver->update();
     }
 }

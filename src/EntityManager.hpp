@@ -31,6 +31,7 @@ public:
     sf::Texture &getTextureFromPath(string filePath);
 
     void draw(sf::RenderWindow &window);
+    void update();
     void handleCollisions();
 
 private:
