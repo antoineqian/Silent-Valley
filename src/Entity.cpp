@@ -87,6 +87,11 @@ float MovingEntity::y() const noexcept
     return animatedSprite.getPosition().y;
 }
 
+void MovingEntity::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+    target.draw(animatedSprite, states);
+}
+
 sf::Vector2f MovingEntity::getVelocity() const
 {
     return velocity;

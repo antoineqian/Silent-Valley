@@ -18,10 +18,6 @@ void Player::update()
 { // Respond to user input as this will affect how the Player moves
     processPlayerInput();
 }
-void Player::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-    target.draw(animatedSprite, states);
-}
 
 // Respond to input from the player
 // If the player presses the left arrow key, move to the left (negative velocity)
@@ -92,19 +88,4 @@ void Player::processPlayerInput()
         animatedSprite.stop();
     }
     animatedSprite.update(frameTime);
-}
-
-sf::FloatRect Player::getBoundingBox() const
-{
-    auto box = animatedSprite.getGlobalBounds();
-    // std::cout << "Left :" << box.left << " / Top : " << box.top + 12 << '\n';
-    return {box.left, box.top + 12, constants::tile_size, constants::player_height};
-}
-
-sf::FloatRect Player::getHitBox() const
-{
-    auto box = getBoundingBox();
-    // std::cout << "Left :" << box.left << " / Top : " << box.top + 12 << '\n';
-    return {box.left + box.width * 0.1f, box.top + box.height * 0.7f, box.width * 0.8f, box.height * 0.3f};
-    // return box;
 }

@@ -78,9 +78,24 @@ void EntityManager::addPlayer(string filePath)
     allEntities.push_back(std::move(pPlayer));
 }
 
-// void EntityManager::addNPCEntity(string filePath)
-// {
-// }
+void EntityManager::addRaver(float x, float y, string filePath)
+{
+    EntityManager::inst().addTextureFromPath(filePath);
+
+    auto pRaver = make_unique<Raver>(
+        x,
+        y,
+        constants::layers.at("main"),
+        EntityManager::inst().getTextureFromPath(filePath),
+        "Raver");
+    auto ptr_alias = pRaver.get();
+
+    // Get the hash code for the entity object's type
+    auto hash = typeid(Raver).hash_code();
+    groupedEntities[hash].emplace_back(ptr_alias);
+
+    allEntities.push_back(std::move(pRaver));
+}
 
 Player &EntityManager::getPlayer()
 {
@@ -102,6 +117,68 @@ void EntityManager::draw(sf::RenderWindow &window)
         window.draw(*entity);
     }
 };
+void doHandleCollisions(MovingEntity *e1, const Entity *e2)
+{
+    auto e1Box = e1->getHitBox();
+    auto e2Box = e2->getHitBox();
+    if (e2Box.intersects(e1Box))
+    {
+        auto eTop = e2Box.top;
+        auto eBottom = e2Box.top + e2Box.height;
+        auto eLeft = e2Box.left;
+        auto eRight = e2Box.left + e2Box.width;
+        auto pTop = e1Box.top;
+        auto pBottom = e1Box.top + e1Box.height;
+        auto pLeft = e1Box.left;
+        auto pRight = e1Box.left + e1Box.width;
+
+        auto BTOverlap = eBottom - pTop;
+        auto TBOverlap = pBottom - eTop;
+        auto RLOverlap = eRight - pLeft;
+        auto LROverlap = pRight - eLeft;
+
+        auto currentPos = e1->getPosition();
+        float newX = currentPos.x;
+        float newY = currentPos.y;
+
+        // TODO: The direction of the collision is defined by which Overlap is
+        // the minimum overlap greater than 0.
+        // Potential refactor. (sort sorts in place, so lower_bounds always points to the first element)
+        // vector<float> overlaps{BTOverlap, TBOverlap, RLOverlap, LROverlap};
+        // std::sort(overlaps.begin(), overlaps.end());
+        // auto lower = std::lower_bound(overlaps.begin(), overlaps.end(), 0);
+        // std::cout << BTOverlap << " " << TBOverlap << " " << RLOverlap << " " << LROverlap << '\n';
+        // std::cout << *lower << '\n';
+        // std::cout << std::distance(overlaps.begin(), lower) << '\n';
+
+        if (BTOverlap > 0 && BTOverlap < RLOverlap && BTOverlap < LROverlap && BTOverlap < TBOverlap) // Coming mainly up, even if some diagonal movement is involved
+        {
+            // std::cout << "Collision moving up\n";
+            newY = e2Box.top + e2Box.height - 0.7f * constants::player_height /**Diff between hitbox top and bounding box top*/
+                   - 12 /**Diff between top of sprite bounds and top of player bounds*/;
+
+            e1->setPosition({currentPos.x, newY});
+        }
+        else if (TBOverlap > 0 && TBOverlap < RLOverlap && TBOverlap < LROverlap && TBOverlap < BTOverlap) // Coming mainly down
+        {
+            // std::cout << "Collision moving down\n";
+            newY = e2Box.top - 32;
+            e1->setPosition({currentPos.x, newY});
+        }
+        else if (RLOverlap > 0 && RLOverlap < TBOverlap && RLOverlap < LROverlap && RLOverlap < BTOverlap) // Coming mainly left
+        {
+            // std::cout << "Collision moving left\n";
+            newX = e2Box.left + e2Box.width - 16 * 0.1f;
+            e1->setPosition({newX, currentPos.y});
+        }
+        else if (LROverlap > 0 && LROverlap < TBOverlap && LROverlap < RLOverlap && LROverlap < BTOverlap) // Coming mainly right
+        {
+            // std::cout << "Collision moving right\n";
+            newX = e2Box.left - e1Box.width - /**Diff between player x position and left hitbox */ 16 * 0.1f;
+            e1->setPosition({newX, currentPos.y});
+        }
+    }
+}
 
 void EntityManager::handleCollisions()
 {
@@ -109,67 +186,19 @@ void EntityManager::handleCollisions()
     auto p = dynamic_cast<Player *>(groupedEntities[pHash][0]);
     auto seHash = typeid(StaticEntity).hash_code();
     auto staticEntities = groupedEntities[seHash];
+    auto rHash = typeid(Raver).hash_code();
+    auto ravers = groupedEntities[rHash];
 
     for (auto &&ptrEntity : staticEntities)
     {
-        auto entityBox = ptrEntity->getHitBox();
-        auto playerBox = p->getHitBox();
-        if (entityBox.intersects(playerBox))
+        doHandleCollisions(p, ptrEntity);
+        for (auto &&raver : ravers)
         {
-            auto eTop = entityBox.top;
-            auto eBottom = entityBox.top + entityBox.height;
-            auto eLeft = entityBox.left;
-            auto eRight = entityBox.left + entityBox.width;
-            auto pTop = playerBox.top;
-            auto pBottom = playerBox.top + playerBox.height;
-            auto pLeft = playerBox.left;
-            auto pRight = playerBox.left + playerBox.width;
-
-            auto BTOverlap = eBottom - pTop;
-            auto TBOverlap = pBottom - eTop;
-            auto RLOverlap = eRight - pLeft;
-            auto LROverlap = pRight - eLeft;
-
-            auto currentPos = p->getPosition();
-            float newX = currentPos.x;
-            float newY = currentPos.y;
-
-            // TODO: The direction of the collision is defined by which Overlap is
-            // the minimum overlap greater than 0.
-            // Potential refactor. (sort sorts in place, so lower_bounds always points to the first element)
-            // vector<float> overlaps{BTOverlap, TBOverlap, RLOverlap, LROverlap};
-            // std::sort(overlaps.begin(), overlaps.end());
-            // auto lower = std::lower_bound(overlaps.begin(), overlaps.end(), 0);
-            // std::cout << BTOverlap << " " << TBOverlap << " " << RLOverlap << " " << LROverlap << '\n';
-            // std::cout << *lower << '\n';
-            // std::cout << std::distance(overlaps.begin(), lower) << '\n';
-
-            if (BTOverlap > 0 && BTOverlap < RLOverlap && BTOverlap < LROverlap && BTOverlap < TBOverlap) // Coming mainly up, even if some diagonal movement is involved
-            {
-                // std::cout << "Collision moving up\n";
-                newY = entityBox.top + entityBox.height - 0.7f * constants::player_height /**Diff between hitbox top and bounding box top*/
-                       - 12 /**Diff between top of sprite bounds and top of player bounds*/;
-
-                p->setPosition({currentPos.x, newY});
-            }
-            else if (TBOverlap > 0 && TBOverlap < RLOverlap && TBOverlap < LROverlap && TBOverlap < BTOverlap) // Coming mainly down
-            {
-                // std::cout << "Collision moving down\n";
-                newY = entityBox.top - 32;
-                p->setPosition({currentPos.x, newY});
-            }
-            else if (RLOverlap > 0 && RLOverlap < TBOverlap && RLOverlap < LROverlap && RLOverlap < BTOverlap) // Coming mainly left
-            {
-                // std::cout << "Collision moving left\n";
-                newX = entityBox.left + entityBox.width - 16 * 0.1f;
-                p->setPosition({newX, currentPos.y});
-            }
-            else if (LROverlap > 0 && LROverlap < TBOverlap && LROverlap < RLOverlap && LROverlap < BTOverlap) // Coming mainly right
-            {
-                // std::cout << "Collision moving right\n";
-                newX = entityBox.left - playerBox.width - /**Diff between player x position and left hitbox */ 16 * 0.1f;
-                p->setPosition({newX, currentPos.y});
-            }
+            doHandleCollisions(dynamic_cast<Raver *>(raver), ptrEntity);
         }
+    }
+    for (auto &&raver : ravers)
+    {
+        doHandleCollisions(p, dynamic_cast<Raver *>(raver));
     }
 }

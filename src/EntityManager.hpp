@@ -3,6 +3,7 @@
 #include <tmxlite/Map.hpp>
 #include "Entity.hpp"
 #include "Player.hpp"
+#include "Raver.hpp"
 #include <memory>
 #include <string>
 using std::string;
@@ -24,6 +25,7 @@ public:
     void addTextureFromPath(string filePath);
     void addObjectAsEntity(const tmx::Object &object);
     void addPlayer(string filePath);
+    void addRaver(float x, float y, string filePath);
     Player &getPlayer();
     void setObjectTileset(const tmx::Tileset &ts);
     sf::Texture &getTextureFromPath(string filePath);

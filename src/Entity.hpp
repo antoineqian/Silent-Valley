@@ -75,6 +75,8 @@ public:
   void setPosition(sf::Vector2f position);
   sf::Vector2f getPosition() const;
 
+  void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
 protected:
   AnimatedSprite animatedSprite;
   unordered_map<string, Animation> animations;

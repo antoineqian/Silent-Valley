@@ -52,13 +52,13 @@ int main()
         }
     }
 
-    // unique_ptr<Player> pPlayer = make_unique<Player>(constants::window_width / 2, constants::window_height / 2, constants::layers.at("main"), "Player");
     EntityManager::inst().addPlayer("assets/complete_player_modernStyle.png");
 
+    // Add some NPCs
+    EntityManager::inst().addRaver(constants::window_width / 3, constants::window_height / 3, "assets/Premade_Character_07.png");
+    EntityManager::inst().addRaver(constants::window_width / 3, 2 * constants::window_height / 3, "assets/Premade_Character_07.png");
+
     // Create the game's window using an object of class RenderWindow
-    // The constructor takes an SFML 2D vector with the window dimensions
-    // and an std::string with the window title
-    // The SFML code is in the sf namespace
     sf::RenderWindow window{{constants::window_width, constants::window_height},
                             "Silent Valley Game"};
 
