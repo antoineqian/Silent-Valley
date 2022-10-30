@@ -8,7 +8,7 @@ project(silentValley)
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS  src/*.cpp)
 
 add_library(silentValleyLib SHARED ${SRC_FILES})
-add_subdirectory(/Users/antoineqian/c++/silentValley/external/tmxlite/tmxlite/)
+add_subdirectory(./external/tmxlite/tmxlite/)
 target_link_libraries(silentValleyLib
     /Library/Frameworks/SFML.framework
     /Library/Frameworks/sfml-system.framework/sfml-system
