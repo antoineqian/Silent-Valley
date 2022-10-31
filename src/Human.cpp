@@ -6,7 +6,7 @@ Human::Human(float x, float y, int z, sf::Texture &texture, string name) : Movin
 
     // Set the initial position
     animatedSprite.setPosition(x, y);
-    currentAnimation = animations["down"];
+    currentAnimation = animations[status];
     animatedSprite.setAnimation(currentAnimation);
 
     velocity = {constants::player_speed, constants::player_speed};

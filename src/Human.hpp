@@ -10,4 +10,7 @@ public:
     ~Human();
     sf::FloatRect getHitBox() const override;
     sf::FloatRect getBoundingBox() const override;
+
+protected:
+    string status{"walking_down"};
 };

@@ -35,7 +35,8 @@ void Player::processPlayerInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         noKeyWasPressed = false;
-        currentAnimation = animations["left"];
+        status = "walking_left";
+        currentAnimation = animations[status];
 
         // Left arrow key pressed - move to the left
         // Unless the Player has gone past the left hand side
@@ -47,7 +48,8 @@ void Player::processPlayerInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         noKeyWasPressed = false;
-        currentAnimation = animations["right"];
+        status = "walking_right";
+        currentAnimation = animations[status];
 
         // Similarly for the right arrow
         if (hitBox.left + hitBox.width <= constants::window_width)
@@ -62,7 +64,8 @@ void Player::processPlayerInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         noKeyWasPressed = false;
-        currentAnimation = animations["up"];
+        status = "walking_up";
+        currentAnimation = animations[status];
         if (hitBox.top >= 0)
             velocity.y = -constants::player_speed;
         else
@@ -71,7 +74,8 @@ void Player::processPlayerInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {
         noKeyWasPressed = false;
-        currentAnimation = animations["down"];
+        status = "walking_down";
+        currentAnimation = animations[status];
         if (hitBox.top + hitBox.height <= constants::window_height)
             velocity.y = constants::player_speed;
         else
