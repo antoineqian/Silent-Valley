@@ -24,6 +24,7 @@ target_link_libraries(silentValleyLib
     /Library/Frameworks/sfml-system.framework/sfml-system
     /Library/Frameworks/sfml-window.framework/sfml-window
     /Library/Frameworks/sfml-graphics.framework/sfml-graphics
+    /Library/Frameworks/sfml-audio.framework/sfml-audio
     /usr/local/lib/libtmxlite.a
     magic_enum
 )
