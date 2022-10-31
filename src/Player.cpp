@@ -29,13 +29,22 @@ void Player::update()
 // Play animation according to direction of movement
 void Player::processPlayerInput()
 {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+    {
+        actionCommand();
+    }
+
+    /***
+     * MOVEMENT
+     */
     bool noKeyWasPressed = true;
     sf::Time frameTime = frameClock.restart();
     auto hitBox = getHitBox();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         noKeyWasPressed = false;
-        currentAnimation = animations["left"];
+        direction = Direction::left;
+        currentAnimation = animations[string(magic_enum::enum_name(direction)) + string("_walking")];
 
         // Left arrow key pressed - move to the left
         // Unless the Player has gone past the left hand side
@@ -47,7 +56,8 @@ void Player::processPlayerInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         noKeyWasPressed = false;
-        currentAnimation = animations["right"];
+        direction = Direction::right;
+        currentAnimation = animations[string(magic_enum::enum_name(direction)) + string("_walking")];
 
         // Similarly for the right arrow
         if (hitBox.left + hitBox.width <= constants::window_width)
@@ -62,7 +72,8 @@ void Player::processPlayerInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         noKeyWasPressed = false;
-        currentAnimation = animations["up"];
+        direction = Direction::up;
+        currentAnimation = animations[string(magic_enum::enum_name(direction)) + string("_walking")];
         if (hitBox.top >= 0)
             velocity.y = -constants::player_speed;
         else
@@ -71,7 +82,8 @@ void Player::processPlayerInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {
         noKeyWasPressed = false;
-        currentAnimation = animations["down"];
+        direction = Direction::down;
+        currentAnimation = animations[string(magic_enum::enum_name(direction)) + string("_walking")];
         if (hitBox.top + hitBox.height <= constants::window_height)
             velocity.y = constants::player_speed;
         else
@@ -88,4 +100,30 @@ void Player::processPlayerInput()
         animatedSprite.stop();
     }
     animatedSprite.update(frameTime);
+}
+
+sf::FloatRect Player::getFacePosition()
+{
+    auto box = getHitBox();
+    switch (magic_enum::enum_integer(direction))
+    {
+    case magic_enum::enum_integer(Direction::up):
+        return {box.left, box.top - 8, box.width, 8};
+    case magic_enum::enum_integer(Direction::down):
+        return {box.left, box.top + box.height, box.width, 8};
+    case magic_enum::enum_integer(Direction::left):
+        return {box.left - 8, box.top, 8, box.width};
+    case magic_enum::enum_integer(Direction::right):
+        return {box.left + box.width, box.top, 8, box.width};
+    }
+}
+
+void Player::actionCommand()
+{
+    sf::Time elapsed = actionTimer.getElapsedTime();
+    if (elapsed.asSeconds() > 1.f)
+    {
+        EntityManager::inst().playerActionCommand();
+        actionTimer.restart();
+    }
 }

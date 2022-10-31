@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="41">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="42">
  <tileset firstgid="1" source="tiles.tsx"/>
  <tileset firstgid="2701" source="Objects.tsx"/>
  <layer id="1" name="Ground" width="60" height="40">
@@ -51,9 +51,10 @@
   <object id="32" name="Tree3" gid="2701" x="797.333" y="114" width="32" height="32"/>
   <object id="33" name="Tree2" gid="2701" x="726" y="354.667" width="32" height="32"/>
   <object id="34" name="Tree1" gid="2701" x="504.667" y="354" width="32" height="32"/>
-  <object id="35" name="Speaker1" gid="2702" x="544.667" y="256" width="16" height="32"/>
-  <object id="36" name="Speaker2" gid="2702" x="560" y="256" width="16" height="32"/>
-  <object id="37" name="Speaker3" gid="2702" x="606.667" y="256" width="16" height="32"/>
-  <object id="38" name="Speaker4" gid="2702" x="623.333" y="255.333" width="16" height="32"/>
+  <object id="35" name="Speaker1" class="Speaker" gid="2702" x="544.667" y="256" width="16" height="32"/>
+  <object id="36" name="Speaker2" class="Speaker" gid="2702" x="560" y="256" width="16" height="32"/>
+  <object id="37" name="Speaker3" class="Speaker" gid="2702" x="606.667" y="256" width="16" height="32"/>
+  <object id="38" name="Speaker4" class="Speaker" gid="2702" x="623.333" y="255.333" width="16" height="32"/>
+  <object id="41" gid="2703" x="475.096" y="485.817" width="42.9744" height="37.8462"/>
  </objectgroup>
 </map>
