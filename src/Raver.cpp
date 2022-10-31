@@ -39,26 +39,26 @@ void Raver::seek(sf::Vector2f target)
         if (abs(diff.x) > 2 * abs(diff.y))
         {
             velocity.x = (diff.x > 0 ? 1 : -1) * constants::player_speed;
-            currentAnimation = diff.x > 0 ? animations["right"] : animations["left"];
+            currentAnimation = diff.x > 0 ? animations["right_walking"] : animations["left_walking"];
             velocity.y = 0;
         }
         else
         {
             velocity.y = (diff.y > 0 ? 1 : -1) * constants::player_speed;
-            currentAnimation = diff.y > 0 ? animations["down"] : animations["up"];
+            currentAnimation = diff.y > 0 ? animations["down_walking"] : animations["up_walking"];
             velocity.x = 0;
         }
     }
     else if (abs(diff.x) > 16)
     {
         velocity.x = (diff.x > 0 ? 1 : -1) * constants::player_speed;
-        currentAnimation = diff.x > 0 ? animations["right"] : animations["left"];
+        currentAnimation = diff.x > 0 ? animations["right_walking"] : animations["left_walking"];
         velocity.y = 0;
     }
     else if (abs(diff.y) > 16)
     {
         velocity.y = (diff.y > 0 ? 1 : -1) * constants::player_speed;
-        currentAnimation = diff.y > 0 ? animations["down"] : animations["up"];
+        currentAnimation = diff.y > 0 ? animations["down_walking"] : animations["up_walking"];
         velocity.x = 0;
     }
     else

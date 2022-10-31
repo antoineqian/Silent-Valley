@@ -14,6 +14,7 @@ private:
     void processPlayerInput();
     void actionCommand();
     sf::Clock actionTimer;
+    Direction direction{Direction::down};
 
 public:
     Player(float x, float y, int z, sf::Texture &texture, string name);
