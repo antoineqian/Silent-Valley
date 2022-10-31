@@ -18,7 +18,7 @@ unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &te
     walkingAnimationDown.addFrame(sf::IntRect(288 + 64, 64, 16, 32));
     walkingAnimationDown.addFrame(sf::IntRect(288 + 80, 64, 16, 32));
 
-    animations.insert({"walking_down", walkingAnimationDown});
+    animations.insert({"down_walking", walkingAnimationDown});
 
     Animation walkingAnimationLeft;
     walkingAnimationLeft.setSpriteSheet(texture);
@@ -28,7 +28,7 @@ unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &te
     walkingAnimationLeft.addFrame(sf::IntRect(192 + 48, 64, 16, 32));
     walkingAnimationLeft.addFrame(sf::IntRect(192 + 64, 64, 16, 32));
     walkingAnimationLeft.addFrame(sf::IntRect(192 + 80, 64, 16, 32));
-    animations.insert({"walking_left", walkingAnimationLeft});
+    animations.insert({"left_walking", walkingAnimationLeft});
 
     Animation walkingAnimationRight;
     walkingAnimationRight.addFrame(sf::IntRect(0, 64, 16, 32));
@@ -37,7 +37,7 @@ unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &te
     walkingAnimationRight.addFrame(sf::IntRect(0 + 48, 64, 16, 32));
     walkingAnimationRight.addFrame(sf::IntRect(0 + 64, 64, 16, 32));
     walkingAnimationRight.addFrame(sf::IntRect(0 + 80, 64, 16, 32));
-    animations.insert({"walking_right", walkingAnimationRight});
+    animations.insert({"right_walking", walkingAnimationRight});
 
     Animation walkingAnimationUp;
     walkingAnimationUp.setSpriteSheet(texture);
@@ -47,7 +47,7 @@ unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &te
     walkingAnimationUp.addFrame(sf::IntRect(96 + 48, 64, 16, 32));
     walkingAnimationUp.addFrame(sf::IntRect(96 + 64, 64, 16, 32));
     walkingAnimationUp.addFrame(sf::IntRect(96 + 80, 64, 16, 32));
-    animations.insert({"walking_up", walkingAnimationUp});
+    animations.insert({"up_walking", walkingAnimationUp});
 
     return animations;
 }

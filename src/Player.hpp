@@ -22,4 +22,6 @@ public:
     Player &operator=(Player &&) = delete;
 
     void update() override;
+
+    sf::FloatRect getFacePosition();
 };

@@ -35,8 +35,8 @@ void Player::processPlayerInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         noKeyWasPressed = false;
-        status = "walking_left";
-        currentAnimation = animations[status];
+        direction = "left";
+        currentAnimation = animations[direction + "_walking"];
 
         // Left arrow key pressed - move to the left
         // Unless the Player has gone past the left hand side
@@ -48,8 +48,8 @@ void Player::processPlayerInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         noKeyWasPressed = false;
-        status = "walking_right";
-        currentAnimation = animations[status];
+        direction = "right";
+        currentAnimation = animations[direction + "_walking"];
 
         // Similarly for the right arrow
         if (hitBox.left + hitBox.width <= constants::window_width)
@@ -64,8 +64,8 @@ void Player::processPlayerInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         noKeyWasPressed = false;
-        status = "walking_up";
-        currentAnimation = animations[status];
+        direction = "up";
+        currentAnimation = animations[direction + "_walking"];
         if (hitBox.top >= 0)
             velocity.y = -constants::player_speed;
         else
@@ -74,8 +74,8 @@ void Player::processPlayerInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {
         noKeyWasPressed = false;
-        status = "walking_down";
-        currentAnimation = animations[status];
+        direction = "down_walking";
+        currentAnimation = animations[direction];
         if (hitBox.top + hitBox.height <= constants::window_height)
             velocity.y = constants::player_speed;
         else
@@ -92,4 +92,19 @@ void Player::processPlayerInput()
         animatedSprite.stop();
     }
     animatedSprite.update(frameTime);
+}
+
+sf::FloatRect Player::getFacePosition()
+{
+    auto box = getHitBox();
+    switch (direction)
+    {
+    case "up":
+
+    case "down":
+
+    case "left":
+
+    case "right":
+    }
 }

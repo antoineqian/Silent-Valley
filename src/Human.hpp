@@ -12,5 +12,5 @@ public:
     sf::FloatRect getBoundingBox() const override;
 
 protected:
-    string status{"walking_down"};
+    string enum { "down" };
 };
