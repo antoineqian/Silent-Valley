@@ -2,7 +2,6 @@
 #include <tmxlite/Map.hpp>
 #include <iostream>
 #include <algorithm>
-#include <random>
 
 using std::cout;
 using std::make_shared;
@@ -100,11 +99,12 @@ void EntityManager::addRaver(float x, float y, string filePath)
         constants::layers.at("main"),
         getTextureFromPath(filePath),
         "Raver");
-    std::random_device rd;                          // obtain a random number from hardware
-    std::mt19937 gen(rd());                         // seed the generator
-    std::uniform_int_distribution<> distr(-96, 96); // define the range
-    pRaver->setTarget({constants::window_width / 2.f + distr(gen),
-                       constants::window_height / 2.f + distr(gen)});
+    // auto pRaver = Raver::create(
+    //     x,
+    //     y,
+    //     constants::layers.at("main"),
+    //     getTextureFromPath(filePath),
+    //     "Raver");
     auto ptr_alias = pRaver.get();
 
     // Get the hash code for the entity object's type
@@ -171,6 +171,7 @@ vector<shared_ptr<Raver>> EntityManager::getRavers()
         });
     return ravers;
 }
+
 void EntityManager::draw(sf::RenderWindow &window)
 {
     std::sort(allEntities.begin(), allEntities.end(),
@@ -282,7 +283,7 @@ void EntityManager::handleCollisions()
 void EntityManager::update(sf::Music &music)
 {
     getPlayer()->update();
-    auto ravers = getRavers();
+    auto ravers = getRavers2();
     for (auto &&raver : ravers)
     {
         raver->update();
@@ -291,6 +292,10 @@ void EntityManager::update(sf::Music &music)
     if (soundsystemState() && (music.getStatus() == sf::SoundSource::Status::Paused || music.getStatus() == sf::SoundSource::Status::Stopped))
     {
         music.play();
+        for (auto &&raver : ravers)
+        {
+            raver->changeState(GoDance::inst());
+        }
     }
     else if (!soundsystemState() && music.getStatus() == sf::SoundSource::Status::Playing)
     {

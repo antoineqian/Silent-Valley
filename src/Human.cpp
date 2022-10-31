@@ -6,10 +6,10 @@ Human::Human(float x, float y, int z, sf::Texture &texture, string name) : Movin
 
     // Set the initial position
     animatedSprite.setPosition(x, y);
+    // TODO: Replace with Idle animation;
     currentAnimation = animations["down_walking"];
     animatedSprite.setAnimation(currentAnimation);
-
-    velocity = {constants::player_speed, constants::player_speed};
+    velocity = {0, 0};
 }
 
 Human::~Human()

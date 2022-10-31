@@ -8,7 +8,8 @@
 unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &texture)
 {
     unordered_map<string, Animation> animations;
-    // set up the animations for all four directions (set spritesheet and push frames)
+
+    // Walking Animations
     Animation walkingAnimationDown;
     walkingAnimationDown.setSpriteSheet(texture);
     walkingAnimationDown.addFrame(sf::IntRect(288, 64, 16, 32));
@@ -17,7 +18,6 @@ unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &te
     walkingAnimationDown.addFrame(sf::IntRect(288 + 48, 64, 16, 32));
     walkingAnimationDown.addFrame(sf::IntRect(288 + 64, 64, 16, 32));
     walkingAnimationDown.addFrame(sf::IntRect(288 + 80, 64, 16, 32));
-
     animations.insert({"down_walking", walkingAnimationDown});
 
     Animation walkingAnimationLeft;
@@ -31,6 +31,7 @@ unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &te
     animations.insert({"left_walking", walkingAnimationLeft});
 
     Animation walkingAnimationRight;
+    walkingAnimationRight.setSpriteSheet(texture);
     walkingAnimationRight.addFrame(sf::IntRect(0, 64, 16, 32));
     walkingAnimationRight.addFrame(sf::IntRect(0 + 16, 64, 16, 32));
     walkingAnimationRight.addFrame(sf::IntRect(0 + 32, 64, 16, 32));
@@ -48,6 +49,48 @@ unordered_map<string, Animation> AnimationAdapter::getAnimations(sf::Texture &te
     walkingAnimationUp.addFrame(sf::IntRect(96 + 64, 64, 16, 32));
     walkingAnimationUp.addFrame(sf::IntRect(96 + 80, 64, 16, 32));
     animations.insert({"up_walking", walkingAnimationUp});
+
+    // Dancing Animations
+
+    Animation dancingAnimationRight;
+    dancingAnimationRight.setSpriteSheet(texture);
+    dancingAnimationRight.addFrame(sf::IntRect(0, 12 * 32, 16, 32));
+    dancingAnimationRight.addFrame(sf::IntRect(0 + 16, 12 * 32, 16, 32));
+    dancingAnimationRight.addFrame(sf::IntRect(0 + 32, 12 * 32, 16, 32));
+    dancingAnimationRight.addFrame(sf::IntRect(0 + 48, 12 * 32, 16, 32));
+    dancingAnimationRight.addFrame(sf::IntRect(0 + 64, 12 * 32, 16, 32));
+    dancingAnimationRight.addFrame(sf::IntRect(0 + 80, 12 * 32, 16, 32));
+    animations.insert({"right_dancing", dancingAnimationRight});
+
+    Animation dancingAnimationUp;
+    dancingAnimationUp.setSpriteSheet(texture);
+    dancingAnimationUp.addFrame(sf::IntRect(12 * 16, 12 * 32, 16, 32));
+    dancingAnimationUp.addFrame(sf::IntRect(12 * 16 + 16, 12 * 32, 16, 32));
+    dancingAnimationUp.addFrame(sf::IntRect(12 * 16 + 32, 12 * 32, 16, 32));
+    dancingAnimationUp.addFrame(sf::IntRect(12 * 16 + 48, 12 * 32, 16, 32));
+    dancingAnimationUp.addFrame(sf::IntRect(12 * 16 + 64, 12 * 32, 16, 32));
+    dancingAnimationUp.addFrame(sf::IntRect(12 * 16 + 80, 12 * 32, 16, 32));
+    animations.insert({"up_dancing", dancingAnimationUp});
+
+    Animation dancingAnimationLeft;
+    dancingAnimationLeft.setSpriteSheet(texture);
+    dancingAnimationLeft.addFrame(sf::IntRect(2 * 12 * 16, 12 * 32, 16, 32));
+    dancingAnimationLeft.addFrame(sf::IntRect(2 * 12 * 16 + 16, 12 * 32, 16, 32));
+    dancingAnimationLeft.addFrame(sf::IntRect(2 * 12 * 16 + 32, 12 * 32, 16, 32));
+    dancingAnimationLeft.addFrame(sf::IntRect(2 * 12 * 16 + 48, 12 * 32, 16, 32));
+    dancingAnimationLeft.addFrame(sf::IntRect(2 * 12 * 16 + 64, 12 * 32, 16, 32));
+    dancingAnimationLeft.addFrame(sf::IntRect(2 * 12 * 16 + 80, 12 * 32, 16, 32));
+    animations.insert({"left_dancing", dancingAnimationLeft});
+
+    Animation dancingAnimationDown;
+    dancingAnimationDown.setSpriteSheet(texture);
+    dancingAnimationDown.addFrame(sf::IntRect(3 * 12 * 16, 12 * 32, 16, 32));
+    dancingAnimationDown.addFrame(sf::IntRect(3 * 12 * 16 + 16, 12 * 32, 16, 32));
+    dancingAnimationDown.addFrame(sf::IntRect(3 * 12 * 16 + 32, 12 * 32, 16, 32));
+    dancingAnimationDown.addFrame(sf::IntRect(3 * 12 * 16 + 48, 12 * 32, 16, 32));
+    dancingAnimationDown.addFrame(sf::IntRect(3 * 12 * 16 + 64, 12 * 32, 16, 32));
+    dancingAnimationDown.addFrame(sf::IntRect(3 * 12 * 16 + 80, 12 * 32, 16, 32));
+    animations.insert({"down_dancing", dancingAnimationDown});
 
     return animations;
 }

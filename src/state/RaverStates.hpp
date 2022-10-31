@@ -6,7 +6,7 @@ class Raver;
 
 //------------------------------------------------------------------------
 //
-// Go to
+// Go to the dancefloor and dance
 //------------------------------------------------------------------------
 class GoDance : public State
 {
@@ -20,7 +20,7 @@ public:
     GoDance &operator=(GoDance &&) = delete;
 
     // this is a singleton
-    static GoDance &inst();
+    static shared_ptr<GoDance> inst();
 
     void enter(shared_ptr<Raver> pRaver) override;
 

@@ -5,6 +5,8 @@
 #include <memory>
 using std::shared_ptr;
 
+class Raver;
+
 class State
 {
 public:
