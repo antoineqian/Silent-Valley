@@ -2,6 +2,8 @@
 #include <tmxlite/Map.hpp>
 #include <iostream>
 #include <algorithm>
+#include <random>
+
 using std::cout;
 using std::make_shared;
 using std::make_unique;
@@ -98,9 +100,12 @@ void EntityManager::addRaver(float x, float y, string filePath)
         constants::layers.at("main"),
         getTextureFromPath(filePath),
         "Raver");
-    // pRaver->setTarget({constants::window_width / 2.f,
-    //                    constants::window_height / 2.f});
-    // auto ptr_alias = pRaver.get();
+    std::random_device rd;                          // obtain a random number from hardware
+    std::mt19937 gen(rd());                         // seed the generator
+    std::uniform_int_distribution<> distr(-96, 96); // define the range
+    pRaver->setTarget({constants::window_width / 2.f + distr(gen),
+                       constants::window_height / 2.f + distr(gen)});
+    auto ptr_alias = pRaver.get();
 
     // Get the hash code for the entity object's type
     auto hash = typeid(Raver).hash_code();
@@ -262,7 +267,14 @@ void EntityManager::handleCollisions()
     }
     for (auto &&raver : ravers)
     {
-        doHandleCollisions(p, raver);
+        doHandleCollisions(raver, p);
+        for (auto &&otherRaver : ravers)
+        {
+            if (raver != otherRaver)
+            {
+                doHandleCollisions(otherRaver, raver);
+            }
+        }
     }
 }
 

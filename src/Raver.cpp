@@ -10,46 +10,58 @@ Raver::~Raver()
 
 void Raver::update()
 {
-    // if (checkTarget)
-    //     seek(target);
+    if (checkTarget)
+        seek(target);
 }
 
-// void Raver::setTarget(sf::Vector2f target)
-// {
-//     this->target = target;
-//     checkTarget = true;
-// }
+void Raver::setTarget(sf::Vector2f target)
+{
+    this->target = target;
+    checkTarget = true;
+}
 
-// void Raver::seek(sf::Vector2f target)
-// {
-//     sf::Time frameTime = frameClock.restart();
+void Raver::seek(sf::Vector2f target)
+{
+    sf::Time frameTime = frameClock.restart();
 
-//     auto diff = target - getPosition();
+    auto diff = target - getPosition();
 
-//     if (abs(diff.x) > 0 && abs(diff.y) > 0)
-//     {
-//         if (abs(diff.x) > abs(diff.y))
-//         {
-//             velocity.x = constants::player_speed;
-//         }
-//         else
-//         {
-//             velocity.y = constants::player_speed;
-//         }
-//     }
-//     else if (abs(diff.x) > 0)
-//     {
-//         velocity.x = constants::player_speed;
-//     }
-//     else if (abs(diff.y) > 0)
-//     {
-//         velocity.y = constants::player_speed;
-//     }
-//     animatedSprite.play(currentAnimation);
-//     animatedSprite.move(velocity);
-//     // if (noKeyWasPressed)
-//     // {
-//     //     animatedSprite.stop();
-//     // }
-//     animatedSprite.update(frameTime);
-// }
+    if (abs(diff.x) > 16 && abs(diff.y) > 16)
+    {
+        if (abs(diff.x) > 2 * abs(diff.y))
+        {
+            velocity.x = (diff.x > 0 ? 1 : -1) * constants::player_speed;
+            currentAnimation = diff.x > 0 ? animations["right"] : animations["left"];
+            velocity.y = 0;
+        }
+        else
+        {
+            velocity.y = (diff.y > 0 ? 1 : -1) * constants::player_speed;
+            currentAnimation = diff.y > 0 ? animations["down"] : animations["up"];
+            velocity.x = 0;
+        }
+    }
+    else if (abs(diff.x) > 16)
+    {
+        velocity.x = (diff.x > 0 ? 1 : -1) * constants::player_speed;
+        currentAnimation = diff.x > 0 ? animations["right"] : animations["left"];
+        velocity.y = 0;
+    }
+    else if (abs(diff.y) > 16)
+    {
+        velocity.y = (diff.y > 0 ? 1 : -1) * constants::player_speed;
+        currentAnimation = diff.y > 0 ? animations["down"] : animations["up"];
+        velocity.x = 0;
+    }
+    else
+    {
+        velocity.x = 0;
+        velocity.y = 0;
+        animatedSprite.stop();
+        currentAnimation = animations["up"];
+    }
+    animatedSprite.play(currentAnimation);
+    animatedSprite.move(velocity);
+
+    animatedSprite.update(frameTime);
+}
