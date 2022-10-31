@@ -226,3 +226,24 @@ void EntityManager::update()
         raver->update();
     }
 }
+
+void EntityManager::playerActionCommand()
+{
+    std::cout << "Player used command\n";
+    auto spHash = typeid(Speaker).hash_code();
+    auto speakers = groupedEntities[spHash];
+    bool useSpeakers = false;
+    for (auto &&speaker : speakers)
+    {
+        if (getPlayer().getFacePosition().intersects(speaker->getHitBox()))
+            useSpeakers = true;
+    }
+
+    if (useSpeakers)
+    {
+        for (auto &&speaker : speakers)
+        {
+            dynamic_cast<Speaker *>(speaker)->switchState();
+        }
+    }
+}

@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <tmxlite/Map.hpp>
@@ -9,6 +10,7 @@
 using std::string;
 using std::unique_ptr;
 
+class Player;
 // Singleton class that manages all entities
 // Only one tileset for every object
 class EntityManager
@@ -33,6 +35,8 @@ public:
     void draw(sf::RenderWindow &window);
     void update();
     void handleCollisions();
+
+    void playerActionCommand();
 
 private:
     using Entities = std::vector<std::unique_ptr<Entity>>;

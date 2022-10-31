@@ -29,6 +29,14 @@ void Player::update()
 // Play animation according to direction of movement
 void Player::processPlayerInput()
 {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+    {
+        actionCommand();
+    }
+
+    /***
+     * MOVEMENT
+     */
     bool noKeyWasPressed = true;
     sf::Time frameTime = frameClock.restart();
     auto hitBox = getHitBox();
@@ -107,5 +115,15 @@ sf::FloatRect Player::getFacePosition()
         return {box.left - 8, box.top, 8, box.width};
     case magic_enum::enum_integer(Direction::right):
         return {box.left + box.width, box.top, 8, box.width};
+    }
+}
+
+void Player::actionCommand()
+{
+    sf::Time elapsed = actionTimer.getElapsedTime();
+    if (elapsed.asSeconds() > 1.f)
+    {
+        EntityManager::inst().playerActionCommand();
+        actionTimer.restart();
     }
 }

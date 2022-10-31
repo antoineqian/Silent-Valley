@@ -4,6 +4,7 @@
 #include "constants.hpp"
 #include "vector"
 #include "Human.hpp"
+#include "EntityManager.hpp"
 using std::unique_ptr;
 using std::vector;
 
@@ -11,6 +12,8 @@ class Player : public Human
 {
 private:
     void processPlayerInput();
+    void actionCommand();
+    sf::Clock actionTimer;
 
 public:
     Player(float x, float y, int z, sf::Texture &texture, string name);
@@ -22,6 +25,5 @@ public:
     Player &operator=(Player &&) = delete;
 
     void update() override;
-
     sf::FloatRect getFacePosition();
 };
