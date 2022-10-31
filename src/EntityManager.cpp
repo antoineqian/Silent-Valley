@@ -257,6 +257,7 @@ void EntityManager::handleCollisions()
 
     auto ravers = getRavers();
 
+    // TODO: Space partitioning
     for (auto &&ptrEntity : staticEntities)
     {
         doHandleCollisions(p, ptrEntity);

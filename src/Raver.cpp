@@ -20,8 +20,16 @@ void Raver::setTarget(sf::Vector2f target)
     checkTarget = true;
 }
 
+// void checkObstacles()
+// {
+//     switch (currentAnimation)
+//     {
+//     }
+// }
+
 void Raver::seek(sf::Vector2f target)
 {
+    // checkObstacles();
     sf::Time frameTime = frameClock.restart();
 
     auto diff = target - getPosition();
