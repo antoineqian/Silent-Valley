@@ -3,4 +3,5 @@ build/
 *.gch
 *.pch
 
+cmake/
 .DS_Store

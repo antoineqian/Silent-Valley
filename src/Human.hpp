@@ -3,6 +3,15 @@
 #include "Entity.hpp"
 #include "animation/Animation.hpp"
 #include "animation/AnimationAdapter.hpp"
+#include <magic_enum.hpp>
+
+enum class Direction
+{
+    up,
+    down,
+    left,
+    right
+};
 class Human : public MovingEntity
 {
 public:
@@ -12,5 +21,5 @@ public:
     sf::FloatRect getBoundingBox() const override;
 
 protected:
-    string enum { "down" };
+    Direction direction{Direction::down};
 };

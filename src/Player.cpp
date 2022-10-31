@@ -35,8 +35,8 @@ void Player::processPlayerInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
     {
         noKeyWasPressed = false;
-        direction = "left";
-        currentAnimation = animations[direction + "_walking"];
+        direction = Direction::left;
+        currentAnimation = animations[string(magic_enum::enum_name(direction)) + string("_walking")];
 
         // Left arrow key pressed - move to the left
         // Unless the Player has gone past the left hand side
@@ -48,8 +48,8 @@ void Player::processPlayerInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
     {
         noKeyWasPressed = false;
-        direction = "right";
-        currentAnimation = animations[direction + "_walking"];
+        direction = Direction::right;
+        currentAnimation = animations[string(magic_enum::enum_name(direction)) + string("_walking")];
 
         // Similarly for the right arrow
         if (hitBox.left + hitBox.width <= constants::window_width)
@@ -64,8 +64,8 @@ void Player::processPlayerInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
     {
         noKeyWasPressed = false;
-        direction = "up";
-        currentAnimation = animations[direction + "_walking"];
+        direction = Direction::up;
+        currentAnimation = animations[string(magic_enum::enum_name(direction)) + string("_walking")];
         if (hitBox.top >= 0)
             velocity.y = -constants::player_speed;
         else
@@ -74,8 +74,8 @@ void Player::processPlayerInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
     {
         noKeyWasPressed = false;
-        direction = "down_walking";
-        currentAnimation = animations[direction];
+        direction = Direction::down;
+        currentAnimation = animations[string(magic_enum::enum_name(direction)) + string("_walking")];
         if (hitBox.top + hitBox.height <= constants::window_height)
             velocity.y = constants::player_speed;
         else
@@ -97,14 +97,15 @@ void Player::processPlayerInput()
 sf::FloatRect Player::getFacePosition()
 {
     auto box = getHitBox();
-    switch (direction)
+    switch (magic_enum::enum_integer(direction))
     {
-    case "up":
-
-    case "down":
-
-    case "left":
-
-    case "right":
+    case magic_enum::enum_integer(Direction::up):
+        return {box.left, box.top - 8, box.width, 8};
+    case magic_enum::enum_integer(Direction::down):
+        return {box.left, box.top + box.height, box.width, 8};
+    case magic_enum::enum_integer(Direction::left):
+        return {box.left - 8, box.top, 8, box.width};
+    case magic_enum::enum_integer(Direction::right):
+        return {box.left + box.width, box.top, 8, box.width};
     }
 }
