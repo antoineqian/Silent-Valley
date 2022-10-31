@@ -1,14 +1,18 @@
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <tmxlite/Map.hpp>
 #include "Entity.hpp"
 #include "Player.hpp"
+#include "Speaker.hpp"
 #include "Raver.hpp"
 #include <memory>
 #include <string>
+#include <vector>
 using std::string;
 using std::unique_ptr;
+using std::vector;
 
 class Player;
 // Singleton class that manages all entities
@@ -25,18 +29,26 @@ public:
     static EntityManager &inst();
 
     void addTextureFromPath(string filePath);
-    void addObjectAsEntity(const tmx::Object &object);
-    void addPlayer(string filePath);
-    void addRaver(float x, float y, string filePath);
-    Player &getPlayer();
     void setObjectTileset(const tmx::Tileset &ts);
     sf::Texture &getTextureFromPath(string filePath);
 
     void draw(sf::RenderWindow &window);
-    void update();
+    void update(sf::Music &music);
     void handleCollisions();
 
     void playerActionCommand();
+    bool soundsystemState();
+
+    // Entity getters
+    Player *getPlayer();
+    vector<Speaker *> getSpeakers();
+    vector<StaticEntity *> getStaticEntities();
+    vector<Raver *> getRavers();
+
+    // Entity "setters"
+    void addObjectAsEntity(const tmx::Object &object);
+    void addPlayer(string filePath);
+    void addRaver(float x, float y, string filePath);
 
 private:
     using Entities = std::vector<std::unique_ptr<Entity>>;

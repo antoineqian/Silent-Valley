@@ -2,7 +2,6 @@
 #include <tmxlite/Map.hpp>
 #include <iostream>
 #include <algorithm>
-#include "Speaker.hpp"
 using std::cout;
 using std::make_shared;
 using std::make_unique;
@@ -106,13 +105,63 @@ void EntityManager::addRaver(float x, float y, string filePath)
     allEntities.push_back(std::move(pRaver));
 }
 
-Player &EntityManager::getPlayer()
+Player *EntityManager::getPlayer()
 {
     auto hash = typeid(Player).hash_code();
     auto p = groupedEntities[hash][0];
-    return *dynamic_cast<Player *>(p);
+    return dynamic_cast<Player *>(p);
 }
 
+vector<Speaker *> EntityManager::getSpeakers()
+{
+    auto hash = typeid(Speaker).hash_code();
+    auto speakersAsEntities = groupedEntities[hash];
+    vector<Speaker *> speakers(speakersAsEntities.size());
+
+    std::transform(
+        speakersAsEntities.begin(),
+        speakersAsEntities.end(),
+        speakers.begin(),
+        [](Entity *e)
+        {
+            return dynamic_cast<Speaker *>(e);
+        });
+    return speakers;
+}
+
+vector<StaticEntity *> EntityManager::getStaticEntities()
+{
+    auto hash = typeid(StaticEntity).hash_code();
+    auto staticEntitiesAsEntities = groupedEntities[hash];
+    vector<StaticEntity *> staticEntities(staticEntitiesAsEntities.size());
+
+    std::transform(
+        staticEntitiesAsEntities.begin(),
+        staticEntitiesAsEntities.end(),
+        staticEntities.begin(),
+        [](Entity *e)
+        {
+            return dynamic_cast<StaticEntity *>(e);
+        });
+    return staticEntities;
+}
+
+vector<Raver *> EntityManager::getRavers()
+{
+    auto hash = typeid(Raver).hash_code();
+    auto raversAsEntities = groupedEntities[hash];
+    vector<Raver *> ravers(raversAsEntities.size());
+
+    std::transform(
+        raversAsEntities.begin(),
+        raversAsEntities.end(),
+        ravers.begin(),
+        [](Entity *e)
+        {
+            return dynamic_cast<Raver *>(e);
+        });
+    return ravers;
+}
 void EntityManager::draw(sf::RenderWindow &window)
 {
     std::sort(allEntities.begin(), allEntities.end(),
@@ -126,6 +175,7 @@ void EntityManager::draw(sf::RenderWindow &window)
         window.draw(*entity);
     }
 };
+
 void doHandleCollisions(MovingEntity *e1, const Entity *e2)
 {
     auto e1Box = e1->getHitBox();
@@ -191,51 +241,60 @@ void doHandleCollisions(MovingEntity *e1, const Entity *e2)
 
 void EntityManager::handleCollisions()
 {
-    auto pHash = typeid(Player).hash_code();
-    auto p = dynamic_cast<Player *>(groupedEntities[pHash][0]);
-    auto seHash = typeid(StaticEntity).hash_code();
-    auto staticEntities = groupedEntities[seHash];
-    auto spHash = typeid(Speaker).hash_code();
-    auto speakers = groupedEntities[spHash];
+    auto p = getPlayer();
+    auto staticEntities = getStaticEntities();
+    auto speakers = getSpeakers();
     staticEntities.insert(staticEntities.end(), speakers.begin(), speakers.end());
 
-    auto rHash = typeid(Raver).hash_code();
-    auto ravers = groupedEntities[rHash];
+    auto ravers = getRavers();
 
     for (auto &&ptrEntity : staticEntities)
     {
         doHandleCollisions(p, ptrEntity);
         for (auto &&raver : ravers)
         {
-            doHandleCollisions(dynamic_cast<Raver *>(raver), ptrEntity);
+            doHandleCollisions(raver, ptrEntity);
         }
     }
     for (auto &&raver : ravers)
     {
-        doHandleCollisions(p, dynamic_cast<Raver *>(raver));
+        doHandleCollisions(p, raver);
     }
 }
 
-void EntityManager::update()
+void EntityManager::update(sf::Music &music)
 {
-    getPlayer().update();
-    auto rHash = typeid(Raver).hash_code();
-    auto ravers = groupedEntities[rHash];
+    getPlayer()->update();
+    auto ravers = getRavers();
     for (auto &&raver : ravers)
     {
         raver->update();
     }
+
+    if (soundsystemState() && (music.getStatus() == sf::SoundSource::Status::Paused || music.getStatus() == sf::SoundSource::Status::Stopped))
+    {
+        music.play();
+    }
+    else if (!soundsystemState() && music.getStatus() == sf::SoundSource::Status::Playing)
+    {
+        music.pause();
+    }
+}
+
+bool EntityManager::soundsystemState()
+{
+    // Speakers are all in the same state;
+    auto speaker = getSpeakers()[0];
+    return speaker->getState();
 }
 
 void EntityManager::playerActionCommand()
 {
-    std::cout << "Player used command\n";
-    auto spHash = typeid(Speaker).hash_code();
-    auto speakers = groupedEntities[spHash];
+    auto speakers = getSpeakers();
     bool useSpeakers = false;
     for (auto &&speaker : speakers)
     {
-        if (getPlayer().getFacePosition().intersects(speaker->getHitBox()))
+        if (getPlayer()->getFacePosition().intersects(speaker->getHitBox()))
             useSpeakers = true;
     }
 
@@ -243,7 +302,7 @@ void EntityManager::playerActionCommand()
     {
         for (auto &&speaker : speakers)
         {
-            dynamic_cast<Speaker *>(speaker)->switchState();
+            speaker->switchState();
         }
     }
 }
