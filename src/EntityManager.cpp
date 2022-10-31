@@ -2,6 +2,7 @@
 #include <tmxlite/Map.hpp>
 #include <iostream>
 #include <algorithm>
+#include "Speaker.hpp"
 using std::cout;
 using std::make_shared;
 using std::make_unique;
@@ -36,14 +37,6 @@ sf::Texture &EntityManager::getTextureFromPath(string filePath)
 void EntityManager::addObjectAsEntity(const tmx::Object &object)
 {
     const auto pos = object.getPosition();
-
-    // std::cout << "Rec dimensions " << rec.top << " " << rec.left << " " << rec.height << " " << rec.width << '\n';
-    // std::cout << object.getName() << '\n';
-    // std::cout << "pos " << pos.x << " " << pos.y << '\n';
-    // std::cout << "Rec " << rec.top << " " << rec.height << " " << rec.top + rec.height << '\n';
-    // std::cout << object.getTileID() << '\n';
-    // std::cout << object.getTilesetName() << '\n';
-
     auto tID = object.getTileID();
     auto path = objectTileSet->getTile(tID)->imagePath;
     addTextureFromPath(path);
@@ -51,13 +44,27 @@ void EntityManager::addObjectAsEntity(const tmx::Object &object)
     sprite.setTexture(getTextureFromPath(path));
     sprite.setPosition(pos.x, pos.y);
 
-    auto ptr = make_unique<StaticEntity>(1, sprite, object.getName());
-    auto ptr_alias = ptr.get();
-    // Get the hash code for the entity object's type
-    auto hash = typeid(StaticEntity).hash_code();
-    // Insert the alias pointer into the map
-    groupedEntities[hash].emplace_back(ptr_alias);
-    allEntities.push_back(std::move(ptr));
+    // TODO: Templatize ?
+    if (object.getClass() == string("Speaker"))
+    {
+        auto ptr = make_unique<Speaker>(1, sprite, object.getName());
+        auto ptr_alias = ptr.get();
+        // Get the hash code for the entity object's type
+        auto hash = typeid(Speaker).hash_code();
+        // Insert the alias pointer into the map
+        groupedEntities[hash].emplace_back(ptr_alias);
+        allEntities.push_back(std::move(ptr));
+    }
+    else
+    {
+        auto ptr = make_unique<StaticEntity>(1, sprite, object.getName());
+        auto ptr_alias = ptr.get();
+        // Get the hash code for the entity object's type
+        auto hash = typeid(StaticEntity).hash_code();
+        // Insert the alias pointer into the map
+        groupedEntities[hash].emplace_back(ptr_alias);
+        allEntities.push_back(std::move(ptr));
+    }
 }
 
 void EntityManager::addPlayer(string filePath)
@@ -188,6 +195,10 @@ void EntityManager::handleCollisions()
     auto p = dynamic_cast<Player *>(groupedEntities[pHash][0]);
     auto seHash = typeid(StaticEntity).hash_code();
     auto staticEntities = groupedEntities[seHash];
+    auto spHash = typeid(Speaker).hash_code();
+    auto speakers = groupedEntities[spHash];
+    staticEntities.insert(staticEntities.end(), speakers.begin(), speakers.end());
+
     auto rHash = typeid(Raver).hash_code();
     auto ravers = groupedEntities[rHash];
 
