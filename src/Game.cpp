@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include <SFML/Audio.hpp>
 
 using std::make_unique;
 
@@ -50,11 +51,12 @@ Game::Game()
 // Display the updated graphics
 void Game::run()
 {
+    music.openFromFile("assets/sounds/08. Surrounded.flac");
     while (window.isOpen())
     {
         // Clear the screen
         window.clear(sf::Color::Black);
-        view.setCenter(EntityManager::inst().getPlayer().x(), EntityManager::inst().getPlayer().y());
+        view.setCenter(EntityManager::inst().getPlayer()->x(), EntityManager::inst().getPlayer()->y());
         window.setView(view);
 
         // Check for any events since the last loop iteration
@@ -71,7 +73,7 @@ void Game::run()
             window.close();
 
         // Calculate the updated graphics
-        EntityManager::inst().update();
+        EntityManager::inst().update(music);
         EntityManager::inst().handleCollisions();
 
         for (auto &&layer : mapLayers)

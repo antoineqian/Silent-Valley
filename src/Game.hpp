@@ -16,4 +16,6 @@ private:
 
     sf::View view{sf::Vector2f(constants::window_width / 2, constants::window_height / 2),
                   sf::Vector2f(constants::window_width / 3, constants::window_height / 3)};
+
+    sf::Music music;
 };
