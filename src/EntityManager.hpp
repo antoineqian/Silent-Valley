@@ -40,10 +40,10 @@ public:
     bool soundsystemState();
 
     // Entity getters
-    Player *getPlayer();
-    vector<Speaker *> getSpeakers();
-    vector<StaticEntity *> getStaticEntities();
-    vector<Raver *> getRavers();
+    shared_ptr<Player> getPlayer();
+    vector<shared_ptr<Speaker>> getSpeakers();
+    vector<shared_ptr<StaticEntity>> getStaticEntities();
+    vector<shared_ptr<Raver>> getRavers();
 
     // Entity "setters"
     void addObjectAsEntity(const tmx::Object &object);
@@ -51,9 +51,9 @@ public:
     void addRaver(float x, float y, string filePath);
 
 private:
-    using Entities = std::vector<std::unique_ptr<Entity>>;
+    using Entities = std::vector<std::shared_ptr<Entity>>;
     Entities allEntities;
-    using entityAliasVector = std::vector<Entity *>;
+    using entityAliasVector = std::vector<std::shared_ptr<Entity>>;
     std::map<size_t, entityAliasVector> groupedEntities;
 
     unique_ptr<Player> player;
