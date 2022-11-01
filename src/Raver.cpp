@@ -2,6 +2,7 @@
 
 Raver::Raver(float x, float y, int z, sf::Texture &texture, string name) : Human(x, y, z, texture, name)
 {
+    currentState = std::make_unique<Idle>();
 }
 std::unique_ptr<Raver> Raver::create(float x, float y, int z, sf::Texture &texture, string name)
 {
@@ -20,8 +21,8 @@ Raver::~Raver()
 void Raver::update()
 {
 
-    if (pCurrentState)
-        pCurrentState->execute(shared_from_this());
+    if (currentState)
+        currentState->execute(getptr());
     sf::Time frameTime = frameClock.restart();
     animatedSprite.play(currentAnimation);
     animatedSprite.move(velocity);
@@ -31,7 +32,7 @@ void Raver::update()
 bool Raver::targetReached()
 {
     auto diff = target - getPosition();
-    return (abs(diff.x) < 16 && abs(diff.y) < 16);
+    return (abs(diff.x) <= 16 && abs(diff.y) <= 16);
 }
 
 void Raver::setAnimation(string animationName)
@@ -93,19 +94,16 @@ void Raver::seekTarget()
     }
 }
 
-void Raver::changeState(shared_ptr<State> pNewState)
+void Raver::changeState(std::unique_ptr<State> state)
 {
-    // make sure both states are both valid before attempting to
-    // call their methods
-    // assert(pCurrentState && pNewState);
-
-    // call the exit method of the existing state
-    // pCurrentState->exit(shared_from_this());
-
-    // change state to the new state
-    pCurrentState = pNewState;
     auto ptr = getptr();
 
+    // call the exit method of the existing state
+    currentState->exit(ptr);
+
+    // change state to the new state
+    currentState = std::move(state);
+
     // call the entry method of the new state
-    pCurrentState->enter(ptr);
+    currentState->enter(ptr);
 }

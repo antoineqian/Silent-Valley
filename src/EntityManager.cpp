@@ -105,7 +105,7 @@ void EntityManager::addRaver(float x, float y, string filePath)
     //     constants::layers.at("main"),
     //     getTextureFromPath(filePath),
     //     "Raver");
-    auto ptr_alias = pRaver.get();
+    // auto ptr_alias = pRaver.get();
 
     // Get the hash code for the entity object's type
     auto hash = typeid(Raver).hash_code();
@@ -283,7 +283,7 @@ void EntityManager::handleCollisions()
 void EntityManager::update(sf::Music &music)
 {
     getPlayer()->update();
-    auto ravers = getRavers2();
+    auto ravers = getRavers();
     for (auto &&raver : ravers)
     {
         raver->update();
@@ -294,7 +294,7 @@ void EntityManager::update(sf::Music &music)
         music.play();
         for (auto &&raver : ravers)
         {
-            raver->changeState(GoDance::inst());
+            raver->changeState(make_unique<GoDance>());
         }
     }
     else if (!soundsystemState() && music.getStatus() == sf::SoundSource::Status::Playing)

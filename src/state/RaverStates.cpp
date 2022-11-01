@@ -24,8 +24,36 @@ void GoDance::exit(shared_ptr<Raver> pRaver)
 {
 }
 
-shared_ptr<GoDance> GoDance::inst()
+// GoDance GoDance::inst()
+// {
+//     GoDance goDance;
+//     return goDance;
+// }
+
+GoDance::GoDance()
 {
-    static shared_ptr<GoDance> goDance;
-    return goDance;
+}
+
+//
+
+void Idle::enter(shared_ptr<Raver> pRaver)
+{
+}
+
+void Idle::execute(shared_ptr<Raver> pRaver)
+{
+}
+
+void Idle::exit(shared_ptr<Raver> pRaver)
+{
+}
+
+// Idle Idle::inst()
+// {
+//     static Idle Idle;
+//     return Idle;
+// }
+
+Idle::Idle()
+{
 }

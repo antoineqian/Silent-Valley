@@ -2,7 +2,9 @@
 #include "Human.hpp"
 #include "state/State.hpp"
 #include "state/RaverStates.hpp"
-
+#include <memory>
+using std::make_unique;
+using std::unique_ptr;
 class State;
 /**
  * @brief Generic non player character class
@@ -17,8 +19,8 @@ public:
     void setTarget(sf::Vector2f target);
     bool targetReached();
     void setAnimation(string animationName);
-    void changeState(shared_ptr<State> new_state);
-    shared_ptr<State> pCurrentState;
+    void changeState(std::unique_ptr<State> state);
+    std::unique_ptr<State> currentState;
     void seekTarget();
     static std::unique_ptr<Raver> create(float x, float y, int z, sf::Texture &texture, string name);
     std::shared_ptr<Raver> getptr();

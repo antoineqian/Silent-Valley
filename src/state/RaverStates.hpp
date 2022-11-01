@@ -1,6 +1,9 @@
 #ifndef RAVER_STATES_H
 #define RAVER_STATES_H
 #include "State.hpp"
+#include <memory>
+using std::make_unique;
+using std::unique_ptr;
 
 class Raver;
 
@@ -10,17 +13,15 @@ class Raver;
 //------------------------------------------------------------------------
 class GoDance : public State
 {
-private:
-    GoDance() {}
-
 public:
+    GoDance();
     GoDance(const GoDance &) = delete;
     GoDance &operator=(const GoDance &) = delete;
     GoDance(GoDance &&) = delete;
     GoDance &operator=(GoDance &&) = delete;
 
     // this is a singleton
-    static shared_ptr<GoDance> inst();
+    // unique_ptr<GoDance> inst();
 
     void enter(shared_ptr<Raver> pRaver) override;
 
@@ -29,6 +30,24 @@ public:
     void exit(shared_ptr<Raver> pRaver) override;
 };
 
+class Idle : public State
+{
+public:
+    Idle();
+    Idle(const Idle &) = delete;
+    Idle &operator=(const Idle &) = delete;
+    Idle(Idle &&) = delete;
+    Idle &operator=(Idle &&) = delete;
+
+    // this is a singleton
+    // unique_ptr<Idle> inst();
+
+    void enter(shared_ptr<Raver> pRaver) override;
+
+    void execute(shared_ptr<Raver> pRaver) override;
+
+    void exit(shared_ptr<Raver> pRaver) override;
+};
 // //------------------------------------------------------------------------
 // //
 // //  Entity will go to a bank and deposit any nuggets he is carrying. If the
