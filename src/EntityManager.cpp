@@ -46,23 +46,26 @@ void EntityManager::addObjectAsEntity(const tmx::Object &object)
     // TODO: Templatize ?
     if (object.getClass() == string("Speaker"))
     {
-        auto ptr = make_unique<Speaker>(1, sprite, object.getName());
-        auto ptr_alias = ptr.get();
+        auto ptr = make_shared<Speaker>(1, sprite, object.getName());
+        // auto ptr_alias = ptr.get();
+
         // Get the hash code for the entity object's type
         auto hash = typeid(Speaker).hash_code();
         // Insert the alias pointer into the map
-        groupedEntities[hash].emplace_back(ptr_alias);
-        allEntities.push_back(std::move(ptr));
+        groupedEntities[hash].emplace_back(ptr);
+        // allEntities.push_back(std::move(ptr));
+        allEntities.push_back(ptr);
     }
     else
     {
-        auto ptr = make_unique<StaticEntity>(1, sprite, object.getName());
-        auto ptr_alias = ptr.get();
+        auto ptr = make_shared<StaticEntity>(1, sprite, object.getName());
+        // auto ptr_alias = ptr.get();
         // Get the hash code for the entity object's type
         auto hash = typeid(StaticEntity).hash_code();
         // Insert the alias pointer into the map
-        groupedEntities[hash].emplace_back(ptr_alias);
-        allEntities.push_back(std::move(ptr));
+        groupedEntities[hash].emplace_back(ptr);
+        // allEntities.push_back(std::move(ptr));
+        allEntities.push_back(ptr);
     }
 }
 
@@ -70,25 +73,26 @@ void EntityManager::addPlayer(string filePath)
 {
     addTextureFromPath(filePath);
 
-    auto pPlayer = make_unique<Player>(
+    auto pPlayer = make_shared<Player>(
         constants::window_width / 2,
         constants::window_height / 2,
         constants::layers.at("main"),
         getTextureFromPath(filePath),
         "Player");
-    auto ptr_alias = pPlayer.get();
+    // auto ptr_alias = pPlayer.get();
     // Get the hash code for the entity object's type
     auto hash = typeid(Player).hash_code();
-    groupedEntities[hash].emplace_back(ptr_alias);
+    groupedEntities[hash].emplace_back(pPlayer);
 
-    allEntities.push_back(std::move(pPlayer));
+    // allEntities.push_back(std::move(pPlayer));
+    allEntities.push_back(pPlayer);
 }
 
 void EntityManager::addRaver(float x, float y, string filePath)
 {
     addTextureFromPath(filePath);
 
-    auto pRaver = make_unique<Raver>(
+    auto pRaver = make_shared<Raver>(
         x,
         y,
         constants::layers.at("main"),
@@ -96,76 +100,76 @@ void EntityManager::addRaver(float x, float y, string filePath)
         "Raver");
     // pRaver->setTarget({constants::window_width / 2.f,
     //                    constants::window_height / 2.f});
-    auto ptr_alias = pRaver.get();
+    // auto ptr_alias = pRaver.get();
 
     // Get the hash code for the entity object's type
     auto hash = typeid(Raver).hash_code();
-    groupedEntities[hash].emplace_back(ptr_alias);
+    groupedEntities[hash].emplace_back(pRaver);
 
-    allEntities.push_back(std::move(pRaver));
+    allEntities.push_back(pRaver);
 }
 
-Player *EntityManager::getPlayer()
+shared_ptr<Player> EntityManager::getPlayer()
 {
     auto hash = typeid(Player).hash_code();
     auto p = groupedEntities[hash][0];
-    return dynamic_cast<Player *>(p);
+    return dynamic_pointer_cast<Player>(p);
 }
 
-vector<Speaker *> EntityManager::getSpeakers()
+vector<shared_ptr<Speaker>> EntityManager::getSpeakers()
 {
     auto hash = typeid(Speaker).hash_code();
     auto speakersAsEntities = groupedEntities[hash];
-    vector<Speaker *> speakers(speakersAsEntities.size());
+    vector<shared_ptr<Speaker>> speakers(speakersAsEntities.size());
 
     std::transform(
         speakersAsEntities.begin(),
         speakersAsEntities.end(),
         speakers.begin(),
-        [](Entity *e)
+        [](shared_ptr<Entity> e)
         {
-            return dynamic_cast<Speaker *>(e);
+            return dynamic_pointer_cast<Speaker>(e);
         });
     return speakers;
 }
 
-vector<StaticEntity *> EntityManager::getStaticEntities()
+vector<shared_ptr<StaticEntity>> EntityManager::getStaticEntities()
 {
     auto hash = typeid(StaticEntity).hash_code();
     auto staticEntitiesAsEntities = groupedEntities[hash];
-    vector<StaticEntity *> staticEntities(staticEntitiesAsEntities.size());
+    vector<shared_ptr<StaticEntity>> staticEntities(staticEntitiesAsEntities.size());
 
     std::transform(
         staticEntitiesAsEntities.begin(),
         staticEntitiesAsEntities.end(),
         staticEntities.begin(),
-        [](Entity *e)
+        [](shared_ptr<Entity> e)
         {
-            return dynamic_cast<StaticEntity *>(e);
+            return dynamic_pointer_cast<StaticEntity>(e);
         });
     return staticEntities;
 }
 
-vector<Raver *> EntityManager::getRavers()
+vector<shared_ptr<Raver>> EntityManager::getRavers()
 {
     auto hash = typeid(Raver).hash_code();
     auto raversAsEntities = groupedEntities[hash];
-    vector<Raver *> ravers(raversAsEntities.size());
+    vector<shared_ptr<Raver>> ravers(raversAsEntities.size());
 
     std::transform(
         raversAsEntities.begin(),
         raversAsEntities.end(),
         ravers.begin(),
-        [](Entity *e)
+        [](shared_ptr<Entity> e)
         {
-            return dynamic_cast<Raver *>(e);
+            return dynamic_pointer_cast<Raver>(e);
         });
     return ravers;
 }
 void EntityManager::draw(sf::RenderWindow &window)
 {
     std::sort(allEntities.begin(), allEntities.end(),
-              [](std::unique_ptr<Entity> &p1, std::unique_ptr<Entity> &p2)
+              [](std::shared_ptr<Entity> &p1, std::shared_ptr<Entity> &p2)
               {
                   return *p1 < *p2;
               });
@@ -176,7 +180,7 @@ void EntityManager::draw(sf::RenderWindow &window)
     }
 };
 
-void doHandleCollisions(MovingEntity *e1, const Entity *e2)
+void doHandleCollisions(shared_ptr<MovingEntity> e1, shared_ptr<const Entity> e2)
 {
     auto e1Box = e1->getHitBox();
     auto e2Box = e2->getHitBox();
