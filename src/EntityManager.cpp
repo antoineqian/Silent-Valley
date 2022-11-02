@@ -2,6 +2,7 @@
 #include <tmxlite/Map.hpp>
 #include <iostream>
 #include <algorithm>
+
 using std::cout;
 using std::make_shared;
 using std::make_unique;
@@ -98,9 +99,6 @@ void EntityManager::addRaver(float x, float y, string filePath)
         constants::layers.at("main"),
         getTextureFromPath(filePath),
         "Raver");
-    // pRaver->setTarget({constants::window_width / 2.f,
-    //                    constants::window_height / 2.f});
-    // auto ptr_alias = pRaver.get();
 
     // Get the hash code for the entity object's type
     auto hash = typeid(Raver).hash_code();
@@ -166,6 +164,7 @@ vector<shared_ptr<Raver>> EntityManager::getRavers()
         });
     return ravers;
 }
+
 void EntityManager::draw(sf::RenderWindow &window)
 {
     std::sort(allEntities.begin(), allEntities.end(),
@@ -252,6 +251,7 @@ void EntityManager::handleCollisions()
 
     auto ravers = getRavers();
 
+    // TODO: Space partitioning
     for (auto &&ptrEntity : staticEntities)
     {
         doHandleCollisions(p, ptrEntity);
@@ -262,7 +262,14 @@ void EntityManager::handleCollisions()
     }
     for (auto &&raver : ravers)
     {
-        doHandleCollisions(p, raver);
+        doHandleCollisions(raver, p);
+        for (auto &&otherRaver : ravers)
+        {
+            if (raver != otherRaver)
+            {
+                doHandleCollisions(otherRaver, raver);
+            }
+        }
     }
 }
 
@@ -278,6 +285,10 @@ void EntityManager::update(sf::Music &music)
     if (soundsystemState() && (music.getStatus() == sf::SoundSource::Status::Paused || music.getStatus() == sf::SoundSource::Status::Stopped))
     {
         music.play();
+        for (auto &&raver : ravers)
+        {
+            raver->changeState(make_unique<GoDance>());
+        }
     }
     else if (!soundsystemState() && music.getStatus() == sf::SoundSource::Status::Playing)
     {
