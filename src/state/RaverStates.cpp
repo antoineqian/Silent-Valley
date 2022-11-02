@@ -3,7 +3,6 @@
 
 void GoDance::enter(shared_ptr<Raver> pRaver)
 {
-    std::cout << "Entered godance state\n";
     std::random_device rd;                          // obtain a random number from hardware
     std::mt19937 gen(rd());                         // seed the generator
     std::uniform_int_distribution<> distr(-96, 96); // define the range
@@ -24,12 +23,6 @@ void GoDance::exit(shared_ptr<Raver> pRaver)
 {
 }
 
-// GoDance GoDance::inst()
-// {
-//     GoDance goDance;
-//     return goDance;
-// }
-
 GoDance::GoDance()
 {
 }
@@ -47,12 +40,6 @@ void Idle::execute(shared_ptr<Raver> pRaver)
 void Idle::exit(shared_ptr<Raver> pRaver)
 {
 }
-
-// Idle Idle::inst()
-// {
-//     static Idle Idle;
-//     return Idle;
-// }
 
 Idle::Idle()
 {

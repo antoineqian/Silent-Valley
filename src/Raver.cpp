@@ -20,7 +20,6 @@ Raver::~Raver()
 
 void Raver::update()
 {
-
     if (currentState)
         currentState->execute(getptr());
     sf::Time frameTime = frameClock.restart();
@@ -45,24 +44,15 @@ void Raver::setTarget(sf::Vector2f target)
     checkTarget = true;
 }
 
-// void checkObstacles()
-// {
-//     switch (currentAnimation)
-//     {
-//     }
-// }
-
 void Raver::seekTarget()
 {
     if (targetReached())
     {
         velocity.x = 0;
         velocity.y = 0;
-        animatedSprite.stop();
-        currentAnimation = animations["up_walking"];
         return;
     }
-    // checkObstacles();
+    // TODO: checkObstacles();
 
     auto diff = target - getPosition();
     if (abs(diff.x) > 16 && abs(diff.y) > 16)
