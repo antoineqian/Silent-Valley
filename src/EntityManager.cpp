@@ -99,13 +99,6 @@ void EntityManager::addRaver(float x, float y, string filePath)
         constants::layers.at("main"),
         getTextureFromPath(filePath),
         "Raver");
-    // auto pRaver = Raver::create(
-    //     x,
-    //     y,
-    //     constants::layers.at("main"),
-    //     getTextureFromPath(filePath),
-    //     "Raver");
-    // auto ptr_alias = pRaver.get();
 
     // Get the hash code for the entity object's type
     auto hash = typeid(Raver).hash_code();
