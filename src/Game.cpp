@@ -1,5 +1,7 @@
 #include "Game.hpp"
 #include <SFML/Audio.hpp>
+#include <TGUI/TGUI.hpp>
+#include <TGUI/Backends/SFML.hpp>
 
 using std::make_unique;
 
@@ -44,6 +46,24 @@ Game::Game()
     window.setFramerateLimit(60); // Max rate is 60 frames per second
 }
 
+void loadChatBox(tgui::GuiBase &gui)
+{
+    tgui::Theme theme;
+    theme.load("assets/TransparentGrey.txt");
+
+    auto chatbox = tgui::ChatBox::create();
+    chatbox->setRenderer(theme.getRenderer("ChatBox"));
+    chatbox->setSize(300, 100);
+    chatbox->setTextSize(18);
+    chatbox->setPosition(420, 310);
+    chatbox->setLinesStartFromTop();
+    chatbox->addLine("texus: Hey, this is TGUI!", tgui::Color::Green);
+    chatbox->addLine("Me: Looks awesome! ;)", tgui::Color::Yellow);
+    chatbox->addLine("texus: Thanks! :)", tgui::Color::Green);
+    chatbox->addLine("Me: The widgets rock ^^", tgui::Color::Yellow);
+    gui.add(chatbox);
+}
+
 // Game loop
 // Clear the screen
 // Check for user input
@@ -52,6 +72,8 @@ Game::Game()
 void Game::run()
 {
     music.openFromFile("assets/sounds/08. Surrounded.flac");
+    tgui::GuiSFML gui{window};
+    loadChatBox(gui);
     while (window.isOpen())
     {
         // Clear the screen
@@ -66,6 +88,7 @@ void Game::run()
         // This will terminate the program
         while (window.pollEvent(event))
         {
+            gui.handleEvent(event);
             if (event.type == sf::Event::Closed)
                 window.close();
         }
@@ -81,6 +104,7 @@ void Game::run()
             window.draw(*layer);
         }
         EntityManager::inst().draw(window);
+        gui.draw();
         window.display();
     }
 }
