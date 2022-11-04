@@ -39,6 +39,7 @@ target_link_libraries(silentValleyLib
 
 target_include_directories(silentValleyLib PUBLIC
     ./external/tmxlite/tmxlite/include
+    /usr/local/Cellar/boost/1.80.0/include
 )
 
 add_executable(silentValley src/main.cpp)

@@ -5,6 +5,8 @@ Speaker::Speaker(int z, sf::Sprite sprite, string name) : StaticEntity(z, sprite
 void Speaker::switchState()
 {
     isActive = !isActive;
+    field_changed(*this, "isActive");
+    // Notify
     std::cout << name << " " << (isActive ? "is active" : "is inactive") << '\n';
 }
 

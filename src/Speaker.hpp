@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.hpp"
-class Speaker : public StaticEntity
+#include "gui/Observable.hpp"
+class Speaker : public StaticEntity, public Observable<Speaker>
 {
 public:
     Speaker(int z, sf::Sprite sprite, string name);

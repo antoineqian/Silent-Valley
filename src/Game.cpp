@@ -61,7 +61,7 @@ void loadChatBox(tgui::GuiBase &gui)
     chatbox->addLine("Me: Looks awesome! ;)", tgui::Color::Yellow);
     chatbox->addLine("texus: Thanks! :)", tgui::Color::Green);
     chatbox->addLine("Me: The widgets rock ^^", tgui::Color::Yellow);
-    gui.add(chatbox);
+    gui.add(chatbox, "InfoBox");
 }
 
 // Game loop
@@ -104,6 +104,12 @@ void Game::run()
             window.draw(*layer);
         }
         EntityManager::inst().draw(window);
+        auto speakers = EntityManager::inst().getSpeakers();
+        for (auto &&speaker : speakers)
+        {
+            auto conn = speaker->field_changed.connect([&gui](Speaker &s, const string &fieldName)
+                                                       { gui.get<tgui::ChatBox>("InfoBox")->addLine("Speakers activated"); });
+        }
         gui.draw();
         window.display();
     }
