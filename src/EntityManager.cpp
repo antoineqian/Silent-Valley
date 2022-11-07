@@ -48,24 +48,19 @@ void EntityManager::addObjectAsEntity(const tmx::Object &object)
     if (object.getClass() == string("Speaker"))
     {
         auto ptr = make_shared<Speaker>(1, sprite, object.getName());
-        // auto ptr_alias = ptr.get();
-
         // Get the hash code for the entity object's type
         auto hash = typeid(Speaker).hash_code();
         // Insert the alias pointer into the map
         groupedEntities[hash].emplace_back(ptr);
-        // allEntities.push_back(std::move(ptr));
         allEntities.push_back(ptr);
     }
     else
     {
         auto ptr = make_shared<StaticEntity>(1, sprite, object.getName());
-        // auto ptr_alias = ptr.get();
         // Get the hash code for the entity object's type
         auto hash = typeid(StaticEntity).hash_code();
         // Insert the alias pointer into the map
         groupedEntities[hash].emplace_back(ptr);
-        // allEntities.push_back(std::move(ptr));
         allEntities.push_back(ptr);
     }
 }
@@ -80,12 +75,9 @@ void EntityManager::addPlayer(string filePath)
         constants::layers.at("main"),
         getTextureFromPath(filePath),
         "Player");
-    // auto ptr_alias = pPlayer.get();
     // Get the hash code for the entity object's type
     auto hash = typeid(Player).hash_code();
     groupedEntities[hash].emplace_back(pPlayer);
-
-    // allEntities.push_back(std::move(pPlayer));
     allEntities.push_back(pPlayer);
 }
 
